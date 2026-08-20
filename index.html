@@ -6,6 +6,7 @@
 <title>Checkout de Missões</title>
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -341,15 +342,24 @@
 
       <sc-if value="{{ telaAcompanhar }}">
         <div data-screen-label="Acompanhamento">
-          <button onClick="{{ voltarMissao }}" style="margin-bottom:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← sair da prévia</button>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px">
+            <button onClick="{{ voltarMissao }}" style="padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.8)">{{ rotuloVoltar }}</button>
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button onClick="{{ baixarPdf }}" style="padding:7px 13px;min-height:38px;border:1.5px solid #F6F1E3;border-radius:14px 9px 15px 8px;background:#F6F1E3;color:#24211C;font-family:Kalam,cursive;font-size:14px;font-weight:700;cursor:pointer">📄 baixar PDF</button>
+              <button onClick="{{ copiar }}" style="padding:7px 13px;min-height:38px;border:1.5px solid rgba(246,241,227,.5);border-radius:14px 9px 15px 8px;background:transparent;color:#F6F1E3;font-family:Kalam,cursive;font-size:14px;font-weight:700;cursor:pointer">{{ rotuloCopiar }}</button>
+              <a href="{{ whatsappLink }}" target="_blank" rel="noreferrer" style="display:inline-flex;align-items:center;padding:7px 13px;min-height:38px;border:1.5px solid #157A45;border-radius:14px 9px 15px 8px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:14px;font-weight:700;text-decoration:none">💬 WhatsApp</a>
+            </div>
+          </div>
 
           <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
             <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
               <div style="min-width:0">
-                <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">acompanhamento · {{ mData }}</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:12px;background:rgba(21,122,69,.12);color:#157A45;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">
+                  <span style="width:7px;height:7px;border-radius:50%;background:#157A45;display:inline-block"></span> acompanhamento ao vivo · {{ mData }}
+                </div>
                 <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:36px;line-height:1;color:#35332B">{{ mNome }}</h1>
-                <div style="font-family:Kalam,cursive;font-size:17px;color:#35332B">{{ mTitulo }}</div>
+                <div style="font-family:Kalam,cursive;font-size:17px;color:#1F3C88">{{ mTitulo }}</div>
               </div>
               <div style="flex:0 0 auto;transform:rotate(-7deg);border:2px solid #96907F;border-radius:3px;padding:3px 9px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">só leitura</div>
             </div>
@@ -661,15 +671,16 @@
           <button onClick="{{ fecharModal }}" style="border:none;background:transparent;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;padding:6px">fechar ✕</button>
         </div>
         <div style="margin-top:8px;font-family:Kalam,cursive;font-size:16px;line-height:1.5;color:#35332B">O PDF é a ficha inteira em uma folha — fases, marcações, anotações e nota. Ele é montado aqui no aparelho: não sobe pra lugar nenhum e não custa nada.</div>
-        <button onClick="{{ baixarPdf }}" style="width:100%;margin-top:16px;padding:11px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">gerar PDF e enviar</button>
+        <button onClick="{{ baixarPdf }}" style="width:100%;margin-top:16px;padding:11px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">📄 gerar PDF e baixar</button>
         <div style="margin-top:18px;padding-top:16px;border-top:1px dotted #96907F">
-          <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">ou mande o link de acompanhamento</div>
-          <div style="margin-top:8px;padding:9px 11px;border:1.5px dashed #1F3C88;border-radius:8px;word-break:break-all;font-family:'Courier New',monospace;font-size:12px;color:#1F3C88">{{ link }}</div>
+          <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">link direto de acompanhamento</div>
+          <div style="margin-top:8px;padding:9px 11px;border:1.5px dashed #1F3C88;border-radius:8px;word-break:break-all;font-family:'Courier New',monospace;font-size:12px;color:#1F3C88;background:rgba(31,60,136,.06)">{{ link }}</div>
           <div style="display:flex;gap:8px;margin-top:10px">
             <button onClick="{{ copiar }}" style="flex:1;padding:10px;min-height:44px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:transparent;color:#1F3C88;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">{{ rotuloCopiar }}</button>
-            <button onClick="{{ verAcompanhar }}" style="flex:1;padding:10px;min-height:44px;border:1.5px solid #35332B;border-radius:14px 9px 15px 8px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">ver prévia</button>
+            <button onClick="{{ verAcompanhar }}" style="flex:1;padding:10px;min-height:44px;border:1.5px solid #35332B;border-radius:14px 9px 15px 8px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">ver acompanhamento</button>
           </div>
-          <button onClick="{{ revogar }}" style="margin-top:10px;border:none;background:transparent;cursor:pointer;padding:6px 0;font-family:Kalam,cursive;font-size:15px;color:#BC2A22">revogar e gerar outro link</button>
+          <a href="{{ whatsappLink }}" target="_blank" rel="noreferrer" style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:10px;padding:10px;min-height:44px;border:1.5px solid #157A45;border-radius:14px 9px 15px 8px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;text-decoration:none;box-sizing:border-box">💬 Enviar no WhatsApp</a>
+          <button onClick="{{ revogar }}" style="margin-top:10px;border:none;background:transparent;cursor:pointer;padding:6px 0;font-family:Kalam,cursive;font-size:14px;color:#BC2A22">revogar e gerar outro link</button>
         </div>
       </div>
     </div>
@@ -684,15 +695,232 @@
 class Component extends DCLogic {
   constructor(p) {
     super(p);
-    const d = this.seed();
+    let d = null;
+    try {
+      const saved = localStorage.getItem("dominic_checkin_store_v2");
+      if (saved) d = JSON.parse(saved);
+    } catch (e) {}
+    if (!d || !d.missoes || !d.pessoas) {
+      d = this.seed();
+    }
+    const rotaInicial = this.detectarRotaInicial(d.missoes) || { nome: "inicio", id: null };
     this.state = {
       pessoas: d.pessoas, missoes: d.missoes, inventario: d.inventario,
-      rota: { nome: "inicio", id: null },
+      rota: rotaInicial,
       dens: p.densidadeInicial === "desktop" ? "desktop" : "celular",
       filtro: "abertas", busca: "", novaNota: "", modal: null, copiado: false,
       scan: "vazio", draft: null, toast: "",
       novo: { pessoaId: "", titulo: "", data: this.hoje() }
     };
+  }
+
+  /* ---------- ciclo de vida & rotas ---------- */
+  componentDidMount() {
+    this.verificarRotaUrl();
+    window.addEventListener("popstate", () => this.verificarRotaUrl());
+    window.addEventListener("storage", (e) => {
+      if (e.key === "dominic_checkin_store_v2" && e.newValue) {
+        try {
+          const parsed = JSON.parse(e.newValue);
+          if (parsed && parsed.missoes && parsed.pessoas) {
+            this.setState({ pessoas: parsed.pessoas, missoes: parsed.missoes, inventario: parsed.inventario || this.state.inventario });
+          }
+        } catch (err) {}
+      }
+    });
+  }
+
+  detectarRotaInicial(missoes) {
+    try {
+      if (typeof window === "undefined") return null;
+      const params = new URLSearchParams(window.location.search);
+      let token = params.get("m") || params.get("tk") || params.get("token") || params.get("acompanhar") || params.get("missao");
+      if (!token && window.location.pathname.startsWith("/m/")) {
+        token = window.location.pathname.replace("/m/", "").trim();
+      }
+      if (!token && window.location.hash.startsWith("#m/")) {
+        token = window.location.hash.replace("#m/", "").trim();
+      }
+      if (!token && window.location.hash.startsWith("#acompanhar/")) {
+        token = window.location.hash.replace("#acompanhar/", "").trim();
+      }
+      if (token) {
+        const m = (missoes || []).find((x) => x.token === token || x.id === token);
+        if (m) {
+          return { nome: "acompanhar", id: m.id, viaLink: true };
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  verificarRotaUrl() {
+    const rota = this.detectarRotaInicial(this.state.missoes);
+    if (rota && (!this.state.rota || this.state.rota.id !== rota.id || this.state.rota.nome !== "acompanhar")) {
+      this.setState({ rota: rota });
+    }
+  }
+
+  obterLinkMissao(m) {
+    if (!m) return "";
+    try {
+      const origin = window.location.origin || "";
+      const path = window.location.pathname === "/" ? "" : window.location.pathname;
+      return origin + path + "?m=" + encodeURIComponent(m.token);
+    } catch (e) {
+      return (this.props.dominio || "https://missoes.vercel.app") + "/m/" + m.token;
+    }
+  }
+
+  /* ---------- geração de PDF ---------- */
+  gerarDocumentoPdf(m) {
+    if (!m) return;
+    const pe = this.state.pessoas.find((x) => x.id === m.pessoaId);
+    const p = this.prog(m);
+    const S = this.S;
+    const nomePessoa = pe ? pe.nome : (m.titulo || "Participante");
+    const tituloMissao = m.titulo || "Missão";
+    const nomeArquivo = ("Missao_" + nomePessoa + "_" + tituloMissao).replace(/[^a-zA-Z0-9_-]/g, "_") + ".pdf";
+
+    this.aviso("Gerando PDF da missão...");
+
+    const container = document.createElement("div");
+    container.style.width = "720px";
+    container.style.padding = "40px 40px 40px 60px";
+    container.style.fontFamily = "Helvetica, Arial, sans-serif";
+    container.style.background = "#F6F1E3";
+    container.style.color = "#24211C";
+    container.style.position = "relative";
+    container.style.boxSizing = "border-box";
+    container.style.backgroundImage = "repeating-linear-gradient(to bottom, transparent 0 31px, #CBD8E9 31px 32px), #F6F1E3";
+
+    let fasesHtml = "";
+    (m.fases || []).forEach((f) => {
+      let passosHtml = "";
+      (f.passos || []).forEach((passo) => {
+        const s = S[passo.status] || S.pendente;
+        passosHtml += `
+          <div style="display:flex;align-items:flex-start;gap:10px;margin-top:8px;padding:4px 0;border-bottom:1px dotted rgba(0,0,0,0.1)">
+            <span style="font-family:Kalam,cursive,sans-serif;font-size:18px;font-weight:700;line-height:1.2;color:${s.cor};width:24px">${s.mark}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-family:Kalam,cursive,sans-serif;font-size:16px;line-height:1.4;color:${passo.status === "pendente" ? "#96907F" : "#35332B"}">${passo.texto || "—"}</div>
+              ${passo.obs ? `<div style="font-family:Caveat,cursive,sans-serif;font-size:19px;line-height:1.2;color:${s.cor};margin-top:2px">${passo.obs}</div>` : ""}
+            </div>
+            <span style="font-size:10px;font-weight:bold;text-transform:uppercase;color:${s.cor};padding:2px 6px;border:1px solid ${s.cor};border-radius:4px;white-space:nowrap">${s.label}</span>
+          </div>
+        `;
+      });
+
+      fasesHtml += `
+        <div style="margin-top:18px;page-break-inside:avoid">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-bottom:1.5px solid #1F3C88;padding-bottom:4px">
+            <div style="font-family:Caveat,cursive,sans-serif;font-size:24px;font-weight:700;color:#1F3C88">${f.nome || "Fase"}</div>
+            <div style="font-family:Kalam,cursive,sans-serif;font-size:15px;color:#BC2A22;font-weight:bold">${f.prazo ? "Prazo: " + f.prazo : ""}</div>
+          </div>
+          ${passosHtml || '<div style="font-size:14px;color:#96907F;padding:6px 0">Nenhum passo definido</div>'}
+        </div>
+      `;
+    });
+
+    const temNota = typeof m.nota === "number";
+    const corNota = this.cNota(m.nota);
+    const notaTexto = temNota ? m.nota.toFixed(1) : "—";
+    const corPct = this.cPct(p.pct);
+
+    container.innerHTML = `
+      <div style="position:absolute;top:0;bottom:0;left:44px;width:1.5px;background:#DDA0A0"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #35332B;padding-bottom:12px">
+        <div>
+          <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#96907F;font-weight:bold">CHECKOUT DE MISSÕES · FICHA OFICIAL</div>
+          <h1 style="margin:4px 0 0;font-family:Caveat,cursive,sans-serif;font-weight:700;font-size:36px;line-height:1.1;color:#35332B">${nomePessoa}</h1>
+          <div style="font-family:Kalam,cursive,sans-serif;font-size:18px;color:#1F3C88;margin-top:2px">${tituloMissao}</div>
+          <div style="margin-top:4px;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#5c574a;font-weight:bold">
+            Status: <span style="color:${m.fechada ? "#157A45" : "#BC2A22"}">${m.fechada ? "FECHADA" : "EM ANDAMENTO"}</span> · Data: ${m.data || this.hoje()}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:Caveat,cursive,sans-serif;font-size:38px;font-weight:700;color:${corPct};line-height:1">${p.pct}%</div>
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:#96907F">${(m.fases || []).length} FASES · ${p.total} PASSOS</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;height:10px;border:1px solid #96907F;border-radius:4px;overflow:hidden;background:#E5DEC9">
+        <div style="height:100%;width:${p.pct}%;background:${corPct}"></div>
+      </div>
+
+      <div style="margin-top:16px">
+        ${fasesHtml}
+      </div>
+
+      <div style="margin-top:28px;border-top:2px solid #DDA0A0;padding-top:16px;display:flex;align-items:center;justify-content:space-between;page-break-inside:avoid">
+        <div style="display:flex;align-items:center;gap:18px">
+          <div style="border:2.5px solid ${corNota};border-radius:50% 45% 52% 48%;width:70px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.4)">
+            <div style="font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#96907F;line-height:1">NOTA</div>
+            <div style="font-family:Caveat,cursive,sans-serif;font-size:28px;font-weight:700;color:${corNota};line-height:1">${notaTexto}</div>
+          </div>
+          <div>
+            <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:#96907F">AVALIADOR RESPONSÁVEL</div>
+            <div style="font-family:Caveat,cursive,sans-serif;font-size:24px;color:#BC2A22">${m.avaliador || "Sem assinatura"}</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#96907F">TOKEN DE ACOMPANHAMENTO</div>
+          <div style="font-family:monospace;font-size:11px;color:#1F3C88;font-weight:bold">${m.token || "tk-oficial"}</div>
+          <div style="font-size:9px;color:#96907F;margin-top:3px">Gerado em ${this.hoje()}</div>
+        </div>
+      </div>
+    `;
+
+    if (typeof window !== "undefined" && typeof window.html2pdf !== "undefined") {
+      const opt = {
+        margin: [10, 8, 10, 8],
+        filename: nomeArquivo,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: "#F6F1E3" },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+      };
+      window.html2pdf().set(opt).from(container).save().then(() => {
+        this.aviso(`PDF "${nomeArquivo}" baixado com sucesso ✓`);
+      }).catch((err) => {
+        console.error(err);
+        this.imprimirContainerFallback(container, nomeArquivo);
+      });
+    } else {
+      this.imprimirContainerFallback(container, nomeArquivo);
+    }
+  }
+
+  imprimirContainerFallback(container, nomeArquivo) {
+    try {
+      const printWindow = window.open("", "_blank");
+      if (printWindow) {
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>${nomeArquivo}</title>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Kalam:wght@300;400;700&display=swap" />
+            <style>
+              @page { size: A4 portrait; margin: 10mm; }
+              body { margin: 0; background: #F6F1E3; font-family: Helvetica, Arial, sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            </style>
+          </head>
+          <body>
+            ${container.outerHTML}
+            <script>
+              window.onload = function() { window.print(); };
+            <\/script>
+          </body>
+          </html>
+        `);
+        printWindow.document.close();
+        this.aviso("Janela de impressão/PDF aberta ✓");
+      } else {
+        window.print();
+      }
+    } catch (e) {
+      window.print();
+    }
   }
 
   /* ---------- básico ---------- */
@@ -729,13 +957,31 @@ class Component extends DCLogic {
   }
   novoId(p) { this._n = (this._n || 0) + 1; return p + "-" + this._n + "-" + Date.now().toString(36); }
 
-  /* ---------- gravação ---------- */
-  salvaM(m) { this.setState((s) => ({ missoes: s.missoes.map((x) => (x.id === m.id ? m : x)) })); }
+  /* ---------- persistência ---------- */
+  persistirDados(missoes, pessoas, inventario) {
+    try {
+      localStorage.setItem("dominic_checkin_store_v2", JSON.stringify({
+        missoes: missoes || this.state.missoes,
+        pessoas: pessoas || this.state.pessoas,
+        inventario: inventario || this.state.inventario
+      }));
+    } catch (e) {}
+  }
+
+  salvaM(m) {
+    const novas = this.state.missoes.map((x) => (x.id === m.id ? m : x));
+    this.setState({ missoes: novas });
+    this.persistirDados(novas, this.state.pessoas, this.state.inventario);
+  }
   patchFase(m, fid, patch) { this.salvaM(Object.assign({}, m, { fases: m.fases.map((f) => (f.id === fid ? Object.assign({}, f, patch) : f)) })); }
   patchPasso(m, fid, pid, patch) {
     this.patchFase(m, fid, { passos: m.fases.find((f) => f.id === fid).passos.map((x) => (x.id === pid ? Object.assign({}, x, patch) : x)) });
   }
-  salvaP(pe) { this.setState((s) => ({ pessoas: s.pessoas.map((x) => (x.id === pe.id ? pe : x)) })); }
+  salvaP(pe) {
+    const novas = this.state.pessoas.map((x) => (x.id === pe.id ? pe : x));
+    this.setState({ pessoas: novas });
+    this.persistirDados(this.state.missoes, novas, this.state.inventario);
+  }
 
   /* ---------- dados ---------- */
   seed() {
@@ -945,7 +1191,9 @@ class Component extends DCLogic {
         data: st.novo.data, nota: null, avaliador: "", fechada: false,
         fases: [{ id: this.novoId("f"), nome: "Fase 1", prazo: "", passos: [{ id: this.novoId("s"), texto: "", obs: "", status: "pendente" }] }]
       };
-      this.setState({ missoes: st.missoes.concat([nova]), modal: null, novo: { pessoaId: "", titulo: "", data: this.hoje() }, rota: { nome: "missao", id: nova.id } });
+      const novasMissoes = st.missoes.concat([nova]);
+      this.setState({ missoes: novasMissoes, modal: null, novo: { pessoaId: "", titulo: "", data: this.hoje() }, rota: { nome: "missao", id: nova.id } });
+      this.persistirDados(novasMissoes, st.pessoas, st.inventario);
     };
 
     /* missão aberta */
@@ -1003,17 +1251,38 @@ class Component extends DCLogic {
       v.irPessoa = () => pe && this.ir("pessoa", pe.id);
       v.verFicha = () => this.ir("ficha", m.id);
       v.verAcompanhar = () => this.ir("acompanhar", m.id);
-      v.voltarMissao = () => this.ir("missao", m.id);
-      v.link = (this.props.dominio || "https://missoes.vercel.app") + "/m/" + m.token;
+      v.rotuloVoltar = (st.rota && st.rota.viaLink) ? "← Painel de Missões" : "← missão";
+      v.voltarMissao = () => {
+        if (st.rota && st.rota.viaLink) {
+          this.ir("missoes");
+        } else {
+          this.ir("missao", m.id);
+        }
+      };
+      v.link = this.obterLinkMissao(m);
+      const msgWp = `Confira a ficha de acompanhamento da missão "${m.titulo}" de ${pe ? pe.nome : 'membro'}:\n${v.link}`;
+      v.whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(msgWp)}`;
       v.mostraNotaPublica = m.fechada && this.props.notaVisivel !== false;
-      v.baixarPdf = () => this.aviso("PDF montado no aparelho ✓");
+      v.baixarPdf = () => this.gerarDocumentoPdf(m);
       v.copiar = () => {
-        if (navigator.clipboard) navigator.clipboard.writeText(v.link);
-        this.setState({ copiado: true });
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(v.link).then(() => {
+            this.setState({ copiado: true });
+            this.aviso("Link copiado para a área de transferência ✓");
+          }).catch(() => {
+            this.setState({ copiado: true });
+          });
+        } else {
+          this.setState({ copiado: true });
+        }
         clearTimeout(this._c); this._c = setTimeout(() => this.setState({ copiado: false }), 1800);
       };
       v.rotuloCopiar = st.copiado ? "copiado ✓" : "copiar link";
-      v.revogar = () => { this.salvaM(Object.assign({}, m, { token: this.novoId("tk") })); this.aviso("link antigo revogado"); };
+      v.revogar = () => {
+        const novoTk = this.novoId("tk");
+        this.salvaM(Object.assign({}, m, { token: novoTk }));
+        this.aviso("link antigo revogado e novo link gerado ✓");
+      };
     }
     v.modalEnviar = st.modal === "enviar";
     v.abrirEnviar = () => this.setState({ modal: "enviar" });
@@ -1061,7 +1330,11 @@ class Component extends DCLogic {
     const filtrados = st.inventario.filter((i) => (i.nome + " " + (i.local || "")).toLowerCase().indexOf(st.busca.toLowerCase()) >= 0);
     const locais = [];
     filtrados.forEach((i) => { const l = i.local || "sem lugar definido"; if (locais.indexOf(l) < 0) locais.push(l); });
-    const mudaItem = (i, patch) => this.setState((s) => ({ inventario: s.inventario.map((x) => (x.id === i.id ? Object.assign({}, x, patch) : x)) }));
+    const mudaItem = (i, patch) => {
+      const novosItens = this.state.inventario.map((x) => (x.id === i.id ? Object.assign({}, x, patch) : x));
+      this.setState({ inventario: novosItens });
+      this.persistirDados(this.state.missoes, this.state.pessoas, novosItens);
+    };
     v.busca = st.busca;
     v.setBusca = (e) => this.setState({ busca: e.target.value });
     v.grupos = locais.map((l) => ({
@@ -1118,7 +1391,9 @@ class Component extends DCLogic {
           nota: d.nota, avaliador: d.avaliador || "", fechada: typeof d.nota === "number",
           fases: d.fases.map((f) => ({ id: this.novoId("f"), nome: f.nome, prazo: "", passos: f.passos.map((x) => ({ id: this.novoId("s"), texto: x.texto, obs: x.obs, status: x.status })) }))
         };
-        this.setState({ pessoas: pessoas, missoes: st.missoes.concat([nova]), scan: "vazio", draft: null, rota: { nome: "missao", id: nova.id } });
+        const novasMissoes = st.missoes.concat([nova]);
+        this.setState({ pessoas: pessoas, missoes: novasMissoes, scan: "vazio", draft: null, rota: { nome: "missao", id: nova.id } });
+        this.persistirDados(novasMissoes, pessoas, st.inventario);
         this.aviso("ficha salva no caderno ✓");
       };
     }
