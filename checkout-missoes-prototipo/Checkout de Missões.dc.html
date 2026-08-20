@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Kalam:wght@300;400;700&display=swap" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #24211C; -webkit-font-smoothing: antialiased; }
+  a { color: #1F3C88; text-decoration: none; }
+  a:hover { color: #BC2A22; }
+  input, textarea, button { font: inherit; }
+  .cn::placeholder { color: rgba(150,144,127,.8); }
+  .cn:focus { background: rgba(31,60,136,.05); border-bottom-color: #1F3C88 !important; }
+  button:focus-visible, .cn:focus-visible { outline: 2px solid #BC2A22; outline-offset: 2px; }
+  @keyframes sobe { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;align-items:stretch;background:#24211C;font-family:Helvetica,'Helvetica Neue',Arial,sans-serif">
+
+  <sc-if value="{{ ehDesktop }}">
+    <aside style="width:212px;flex:0 0 212px;display:flex;flex-direction:column;gap:2px;padding:22px 0 18px;background:linear-gradient(170deg,#6E5334 0%,#4A3722 100%);box-shadow:6px 0 24px rgba(0,0,0,.35)">
+      <div style="padding:0 22px 22px">
+        <div style="font-family:Caveat,cursive;font-size:27px;line-height:1.05;color:#F6F1E3">Checkout<br />de Missões</div>
+        <div style="margin-top:6px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(246,241,227,.45)">prancheta do time</div>
+      </div>
+      <sc-for list="{{ railNavs }}" as="n" hint-placeholder-count="5">
+        <button onClick="{{ n.ir }}" style="display:block;width:100%;text-align:left;padding:11px 22px;min-height:44px;border:none;border-left:3px solid {{ n.borda }};background:{{ n.bg }};color:{{ n.cor }};font-family:Caveat,cursive;font-size:21px;cursor:pointer">{{ n.label }}</button>
+      </sc-for>
+      <div style="margin-top:auto;padding:18px 22px 0;font-size:9px;line-height:1.7;letter-spacing:.1em;text-transform:uppercase;color:rgba(246,241,227,.3)">a ficha manda<br />o app só guarda</div>
+    </aside>
+  </sc-if>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;align-items:center">
+
+    <div style="width:100%;max-width:{{ maxW }};display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 14px 4px">
+      <div style="display:flex;align-items:baseline;gap:9px;min-width:0">
+        <sc-if value="{{ ehCelular }}">
+          <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:Caveat,cursive;font-size:23px;color:#F6F1E3">Checkout de Missões</span>
+        </sc-if>
+        <sc-if value="{{ ehDesktop }}">
+          <span style="flex:0 0 auto;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(246,241,227,.4)">protótipo</span>
+        </sc-if>
+      </div>
+      <div style="display:flex;gap:4px;padding:3px;border:1px solid rgba(246,241,227,.2);border-radius:20px">
+        <sc-for list="{{ densidades }}" as="d" hint-placeholder-count="2">
+          <button onClick="{{ d.sel }}" style="padding:6px 13px;border:none;border-radius:16px;cursor:pointer;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;background:{{ d.bg }};color:{{ d.cor }}">{{ d.label }}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="width:100%;max-width:{{ maxW }};padding:10px 14px 120px">
+
+      <sc-if value="{{ telaInicio }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Primeira vez" style="position:relative;overflow:hidden;border-radius:3px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:30px 26px 30px 46px">
+          <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+          <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">primeira vez aqui</div>
+          <h1 style="margin:4px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:40px;line-height:1.05;color:#35332B">Como funciona o checkout</h1>
+          <p style="margin:8px 0 0;font-family:Kalam,cursive;font-size:17px;line-height:1.5;color:#35332B;max-width:52ch;text-wrap:pretty">A missão nasce em papel, na prancheta. O app entra depois: guarda o que foi decidido, marca o que saiu e devolve a ficha em PDF.</p>
+
+          <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:26px">
+            <sc-for list="{{ passosInicio }}" as="s" hint-placeholder-count="3">
+              <div style="flex:1 1 220px;min-width:0;padding-top:6px;border-top:1.5px solid #DDA0A0">
+                <div style="font-family:Caveat,cursive;font-size:34px;font-weight:700;color:#1F3C88;line-height:1">{{ s.n }}</div>
+                <div style="margin-top:2px;font-family:Caveat,cursive;font-size:25px;color:#35332B">{{ s.titulo }}</div>
+                <div style="margin-top:2px;font-family:Kalam,cursive;font-size:16px;line-height:1.45;color:#5c574a">{{ s.texto }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:28px">
+            <button onClick="{{ irMissoes }}" style="padding:11px 20px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:17px;font-weight:700;cursor:pointer">abrir as missões</button>
+            <button onClick="{{ irEscanear }}" style="padding:11px 20px;min-height:44px;border:1.5px solid #35332B;border-radius:15px 10px 17px 9px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:17px;font-weight:700;cursor:pointer">tenho uma ficha na mão</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaMissoes }}">
+        <div data-screen-label="Missões">
+          <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
+            <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+            <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px">
+              <div>
+                <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">checkout · {{ hoje }}</div>
+                <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:38px;line-height:1;color:#35332B">Missões</h1>
+              </div>
+              <button onClick="{{ abrirNovo }}" style="padding:9px 18px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">+ nova ficha</button>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:28px;margin-top:18px">
+              <div>
+                <div style="font-family:Caveat,cursive;font-size:32px;font-weight:700;line-height:1;color:#35332B">{{ abertas }}</div>
+                <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">abertas</div>
+              </div>
+              <div>
+                <div style="font-family:Caveat,cursive;font-size:32px;font-weight:700;line-height:1;color:#35332B">{{ totalM }}</div>
+                <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">no total</div>
+              </div>
+              <div>
+                <div style="font-family:Caveat,cursive;font-size:32px;font-weight:700;line-height:1;color:{{ corMedia }}">{{ mediaTexto }}</div>
+                <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">nota média</div>
+              </div>
+            </div>
+
+            <div style="display:flex;gap:7px;margin-top:18px">
+              <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="3">
+                <button onClick="{{ f.sel }}" style="padding:5px 13px;border:1.5px solid #1F3C88;border-radius:13px 8px 14px 7px;cursor:pointer;font-family:Kalam,cursive;font-size:15px;background:{{ f.bg }};color:{{ f.cor }}">{{ f.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <sc-if value="{{ novoAberto }}">
+            <div style="margin-top:14px;position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:20px 22px 22px 46px">
+              <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+              <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">nova ficha</div>
+              <div style="margin-top:10px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">para quem</div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:6px">
+                <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
+                  <button onClick="{{ c.sel }}" style="padding:5px 13px;min-height:34px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;cursor:pointer;font-family:Kalam,cursive;font-size:15px;background:{{ c.bg }};color:{{ c.cor }}">{{ c.nome }}</button>
+                </sc-for>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:16px">
+                <div style="flex:1 1 240px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">título</div>
+                  <input class="cn" value="{{ novoTitulo }}" onChange="{{ setNovoTitulo }}" placeholder="missão de captação" style="width:100%;padding:3px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+                </div>
+                <div style="flex:0 1 130px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">data</div>
+                  <input class="cn" value="{{ novoData }}" onChange="{{ setNovoData }}" style="width:100%;padding:3px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+                </div>
+              </div>
+              <button onClick="{{ criar }}" style="margin-top:18px;padding:10px 20px;min-height:44px;border:1.5px solid #157A45;border-radius:15px 10px 17px 9px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">abrir a ficha</button>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px">
+            <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.abrir }}" style="flex:1 1 330px;min-width:0;text-align:left;border:none;cursor:pointer;padding:0;background:transparent">
+                <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 22px rgba(0,0,0,.3);padding:16px 18px 16px 44px">
+                  <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+                    <div style="min-width:0">
+                      <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:{{ c.corEstado }}">{{ c.estado }}</div>
+                      <div style="margin-top:1px;font-family:Caveat,cursive;font-size:27px;font-weight:700;line-height:1.1;color:#35332B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.nome }}</div>
+                      <div style="font-family:Kalam,cursive;font-size:15px;color:#5c574a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.titulo }}</div>
+                      <div style="margin-top:3px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ c.meta }}</div>
+                    </div>
+                    <sc-if value="{{ c.temNota }}">
+                      <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:70px;height:52px;flex:0 0 70px">
+                        <svg viewBox="0 0 100 72" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M52 7 C80 6 96 21 94 37 C92 53 70 66 45 65 C20 64 5 50 7 33 C9 17 29 7 57 8 C68 8 78 11 85 16" fill="none" stroke="{{ c.corNota }}" stroke-width="2.4" stroke-linecap="round"></path></svg>
+                        <span style="position:relative;font-family:Caveat,cursive;font-size:26px;font-weight:700;color:{{ c.corNota }}">{{ c.notaTexto }}</span>
+                      </span>
+                    </sc-if>
+                    <sc-if value="{{ c.semNota }}">
+                      <span style="font-family:Caveat,cursive;font-size:30px;font-weight:700;color:{{ c.cor }}">{{ c.pctTexto }}</span>
+                    </sc-if>
+                  </div>
+                  <div style="margin-top:12px;height:7px;border:1px solid #C8C2AF;border-radius:5px;overflow:hidden">
+                    <div style="height:100%;width:{{ c.pctCss }};background:{{ c.cor }}"></div>
+                  </div>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ listaVazia }}">
+            <div style="margin-top:14px;border-radius:3px;background:#F6F1E3;padding:34px;text-align:center;font-family:Kalam,cursive;font-size:17px;color:#96907F">nada por aqui. escaneie uma ficha ou abra uma nova.</div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaMissao }}">
+        <div data-screen-label="Missão">
+          <button onClick="{{ irMissoes }}" style="margin-bottom:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← missões</button>
+
+          <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
+            <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+            <div style="font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:{{ mCorEstado }}">{{ mEstado }} · {{ mData }}</div>
+            <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:38px;line-height:1;color:#35332B">{{ mNome }}</h1>
+            <input class="cn" value="{{ mTitulo }}" onChange="{{ setTitulo }}" placeholder="título da missão" style="width:100%;margin-top:6px;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(59,57,47,.3);outline:none;font-family:Kalam,cursive;font-size:17px;color:#35332B" />
+
+            <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;margin-top:18px">
+              <span style="font-family:Caveat,cursive;font-size:44px;font-weight:700;line-height:.9;color:{{ mCorPct }}">{{ mPct }}</span>
+              <div style="display:flex;gap:20px">
+                <sc-for list="{{ contagens }}" as="k" hint-placeholder-count="3">
+                  <div style="text-align:center">
+                    <div style="font-family:Caveat,cursive;font-size:24px;font-weight:700;line-height:1;color:{{ k.cor }}">{{ k.n }}</div>
+                    <div style="font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ k.label }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="margin-top:8px;height:8px;border:1px solid #C8C2AF;border-radius:5px;overflow:hidden">
+              <div style="height:100%;width:{{ mPctCss }};background:{{ mCorPct }}"></div>
+            </div>
+
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:18px">
+              <button onClick="{{ abrirEnviar }}" style="padding:9px 16px;min-height:44px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:transparent;color:#1F3C88;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">enviar missão</button>
+              <button onClick="{{ verFicha }}" style="padding:9px 16px;min-height:44px;border:1.5px solid #35332B;border-radius:14px 9px 15px 8px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">ficha impressa</button>
+              <sc-if value="{{ temPessoa }}">
+                <button onClick="{{ irPessoa }}" style="padding:9px 16px;min-height:44px;border:1.5px solid #96907F;border-radius:14px 9px 15px 8px;background:transparent;color:#5c574a;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">ficha de {{ primeiroNome }}</button>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;align-items:flex-start">
+            <div style="flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ fases }}" as="f" hint-placeholder-count="2">
+                <div style="position:relative;overflow:hidden;border-radius:3px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:18px 20px 18px 46px">
+                  <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+                  <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:6px 10px">
+                    <input class="cn" value="{{ f.nome }}" onChange="{{ f.setNome }}" placeholder="nome da fase" style="flex:1 1 100%;min-width:0;padding:1px 0;background:transparent;border:none;border-bottom:1px dotted rgba(59,57,47,.28);outline:none;font-family:Caveat,cursive;font-size:28px;font-weight:700;color:#35332B" />
+                    <input class="cn" value="{{ f.prazo }}" onChange="{{ f.setPrazo }}" placeholder="prazo" style="flex:1 1 96px;min-width:0;padding:1px 0;background:transparent;border:none;border-bottom:1px dotted rgba(188,42,34,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#BC2A22" />
+                    <button onClick="{{ f.remover }}" style="border:none;background:transparent;cursor:pointer;color:#96907F;font-family:Kalam,cursive;font-size:15px;padding:4px">✕</button>
+                  </div>
+
+                  <div style="margin-top:10px;display:flex;flex-direction:column">
+                    <sc-for list="{{ f.passos }}" as="p" hint-placeholder-count="3">
+                      <div style="padding:10px 0;border-top:1px dotted rgba(0,0,0,.12)">
+                        <div style="display:flex;align-items:flex-start;gap:9px">
+                          <span style="font-family:Kalam,cursive;font-size:20px;font-weight:700;line-height:1.2;color:{{ p.cor }}">{{ p.marca }}</span>
+                          <textarea class="cn" value="{{ p.texto }}" onChange="{{ p.setTexto }}" rows="{{ p.rows }}" placeholder="escreva o passo" style="flex:1;min-width:0;resize:none;padding:1px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.25);outline:none;font-family:Kalam,cursive;font-size:17px;line-height:1.4;color:#35332B"></textarea>
+                          <button onClick="{{ p.remover }}" style="border:none;background:transparent;cursor:pointer;color:#96907F;font-family:Kalam,cursive;font-size:14px;padding:4px">✕</button>
+                        </div>
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0 29px">
+                          <sc-for list="{{ p.botoes }}" as="b" hint-placeholder-count="3">
+                            <sc-if value="{{ marcaCaneta }}">
+                              <button onClick="{{ b.sel }}" style="padding:4px 11px;min-height:32px;border:1.5px solid {{ b.borda }};border-radius:12px 8px 13px 7px;cursor:pointer;font-family:Kalam,cursive;font-size:14px;background:{{ b.bg }};color:{{ b.cor }}">{{ b.mark }} {{ b.label }}</button>
+                            </sc-if>
+                            <sc-if value="{{ marcaCarimbo }}">
+                              <button onClick="{{ b.sel }}" style="padding:5px 10px;min-height:32px;border:1.5px solid {{ b.borda }};border-radius:2px;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;background:{{ b.bg }};color:{{ b.cor }}">{{ b.label }}</button>
+                            </sc-if>
+                          </sc-for>
+                        </div>
+                        <div style="margin:6px 0 0 29px">
+                          <input class="cn" value="{{ p.obs }}" onChange="{{ p.setObs }}" placeholder="anotação do avaliador" style="width:100%;padding:1px 0;background:transparent;border:none;border-bottom:1px dotted rgba(0,0,0,.12);outline:none;font-family:Caveat,cursive;font-size:20px;color:{{ p.cor }}" />
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+
+                  <button onClick="{{ f.addPasso }}" style="margin-top:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:#1F3C88">+ passo</button>
+                </div>
+              </sc-for>
+
+              <button onClick="{{ addFase }}" style="width:100%;padding:14px;border:2px dashed rgba(246,241,227,.3);border-radius:8px;background:transparent;cursor:pointer;font-family:Caveat,cursive;font-size:24px;color:rgba(246,241,227,.7)">+ fase</button>
+            </div>
+
+            <div style="flex:1 1 290px;min-width:0;position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:20px 22px 22px 46px">
+              <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+              <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">fechamento</div>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+                <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:92px;height:66px;flex:0 0 92px">
+                  <svg viewBox="0 0 100 72" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M52 7 C80 6 96 21 94 37 C92 53 70 66 45 65 C20 64 5 50 7 33 C9 17 29 7 57 8 C68 8 78 11 85 16" fill="none" stroke="{{ corNota }}" stroke-width="2.2" stroke-linecap="round"></path></svg>
+                  <span style="position:relative;font-family:Caveat,cursive;font-size:33px;font-weight:700;color:{{ corNota }}">{{ notaTexto }}</span>
+                </span>
+                <div style="flex:1;min-width:0">
+                  <input type="range" min="0" max="10" step="0.5" value="{{ notaValor }}" onChange="{{ setNota }}" style="width:100%;height:26px;accent-color:{{ corNota }}" />
+                  <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F">nota de 0 a 10</div>
+                </div>
+              </div>
+              <div style="margin-top:16px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">avaliador</div>
+              <input class="cn" value="{{ avaliador }}" onChange="{{ setAvaliador }}" placeholder="quem assina" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(188,42,34,.35);outline:none;font-family:Caveat,cursive;font-size:24px;color:#BC2A22" />
+              <button onClick="{{ alternarFechada }}" style="width:100%;margin-top:20px;padding:11px;min-height:44px;border:1.5px solid {{ corBotaoFechar }};border-radius:15px 10px 17px 9px;background:{{ fundoBotaoFechar }};color:{{ textoBotaoFechar }};font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">{{ rotuloFechar }}</button>
+              <div style="margin-top:14px;font-family:Kalam,cursive;font-size:15px;line-height:1.45;color:#96907F">fechar registra a nota na ficha da pessoa e libera o PDF.</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaFicha }}">
+        <div data-screen-label="Ficha impressa">
+          <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+            <button onClick="{{ voltarMissao }}" style="border:none;background:transparent;cursor:pointer;padding:6px 0;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← missão</button>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ baixarPdf }}" style="padding:8px 15px;min-height:44px;border:1.5px solid #F6F1E3;border-radius:14px 9px 15px 8px;background:#F6F1E3;color:#24211C;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">baixar PDF</button>
+              <button onClick="{{ verAcompanhar }}" style="padding:8px 15px;min-height:44px;border:1.5px solid rgba(246,241,227,.4);border-radius:14px 9px 15px 8px;background:transparent;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;cursor:pointer">ver acompanhamento</button>
+            </div>
+          </div>
+
+          <div style="max-width:660px;margin:0 auto;position:relative;overflow:hidden;border-radius:2px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 18px 40px rgba(0,0,0,.45);padding:44px 40px 40px 62px;min-height:760px">
+            <div style="position:absolute;top:0;bottom:0;left:48px;width:1px;background:#DDA0A0"></div>
+            <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#96907F">ficha de missão</div>
+            <h1 style="margin:6px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:40px;line-height:1;color:#35332B">{{ mNome }}</h1>
+            <div style="font-family:Kalam,cursive;font-size:18px;color:#1F3C88">{{ mTitulo }}</div>
+            <div style="margin-top:4px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:{{ mCorEstado }}">{{ mEstado }} · {{ mData }}</div>
+
+            <div style="margin-top:20px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#5c574a">{{ mPct }} concluído · {{ mQtdFases }} fases · {{ mTotalPassos }} passos</div>
+            <div style="margin-top:6px;height:9px;border:1px solid #96907F;border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:{{ mPctCss }};background:{{ mCorPct }}"></div>
+            </div>
+            <div style="margin-top:16px;border-top:1.5px solid #DDA0A0"></div>
+
+            <sc-for list="{{ fases }}" as="f" hint-placeholder-count="2">
+              <div style="margin-top:20px">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <div style="font-family:Caveat,cursive;font-size:27px;font-weight:700;color:#35332B">{{ f.nome }}</div>
+                  <div style="font-family:Kalam,cursive;font-size:16px;color:#BC2A22">{{ f.prazo }}</div>
+                </div>
+                <sc-for list="{{ f.passos }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:flex-start;gap:10px;margin-top:8px">
+                    <span style="font-family:Kalam,cursive;font-size:19px;font-weight:700;line-height:1.3;color:{{ p.cor }}">{{ p.marca }}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-family:Kalam,cursive;font-size:17px;line-height:1.45;color:{{ p.corTexto }}">{{ p.texto }}</div>
+                      <sc-if value="{{ p.temObs }}">
+                        <div style="font-family:Caveat,cursive;font-size:21px;line-height:1.2;color:{{ p.cor }}">{{ p.obs }}</div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+
+            <div style="margin-top:26px;border-top:1.5px solid #DDA0A0;padding-top:16px">
+              <div style="font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:#96907F">fechamento</div>
+              <div style="display:flex;align-items:center;gap:18px;margin-top:10px">
+                <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:92px;height:66px;flex:0 0 92px">
+                  <svg viewBox="0 0 100 72" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M52 7 C80 6 96 21 94 37 C92 53 70 66 45 65 C20 64 5 50 7 33 C9 17 29 7 57 8 C68 8 78 11 85 16" fill="none" stroke="{{ corNota }}" stroke-width="2.2" stroke-linecap="round"></path></svg>
+                  <span style="position:relative;font-family:Caveat,cursive;font-size:32px;font-weight:700;color:{{ corNota }}">{{ notaTexto }}</span>
+                </span>
+                <div>
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">assinatura</div>
+                  <div style="font-family:Caveat,cursive;font-size:28px;color:#BC2A22">{{ assinatura }}</div>
+                </div>
+              </div>
+              <div style="margin-top:26px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">documento gerado pelo checkout de missões · {{ hoje }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaAcompanhar }}">
+        <div data-screen-label="Acompanhamento">
+          <button onClick="{{ voltarMissao }}" style="margin-bottom:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← sair da prévia</button>
+
+          <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
+            <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+              <div style="min-width:0">
+                <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">acompanhamento · {{ mData }}</div>
+                <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:36px;line-height:1;color:#35332B">{{ mNome }}</h1>
+                <div style="font-family:Kalam,cursive;font-size:17px;color:#35332B">{{ mTitulo }}</div>
+              </div>
+              <div style="flex:0 0 auto;transform:rotate(-7deg);border:2px solid #96907F;border-radius:3px;padding:3px 9px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">só leitura</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:16px">
+              <span style="font-family:Caveat,cursive;font-size:36px;font-weight:700;line-height:1;color:{{ mCorPct }}">{{ mPct }}</span>
+              <div style="flex:1;height:8px;border:1px solid #C8C2AF;border-radius:5px;overflow:hidden">
+                <div style="height:100%;width:{{ mPctCss }};background:{{ mCorPct }}"></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px">
+            <sc-for list="{{ fases }}" as="f" hint-placeholder-count="2">
+              <div style="flex:1 1 330px;min-width:0;position:relative;overflow:hidden;border-radius:3px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:18px 20px 18px 46px">
+                <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px">
+                  <div style="font-family:Caveat,cursive;font-size:26px;font-weight:700;color:#35332B">{{ f.nome }}</div>
+                  <div style="font-family:Kalam,cursive;font-size:16px;color:#BC2A22">{{ f.prazo }}</div>
+                </div>
+                <sc-for list="{{ f.passos }}" as="p" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:flex-start;gap:9px;padding:7px 0;border-bottom:1px dotted rgba(0,0,0,.1)">
+                    <span style="font-family:Kalam,cursive;font-size:19px;font-weight:700;line-height:1.3;color:{{ p.cor }}">{{ p.marca }}</span>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-family:Kalam,cursive;font-size:17px;line-height:1.4;color:{{ p.corTexto }}">{{ p.texto }}</div>
+                      <sc-if value="{{ p.temObs }}">
+                        <div style="font-family:Caveat,cursive;font-size:20px;color:{{ p.cor }}">{{ p.obs }}</div>
+                      </sc-if>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ mostraNotaPublica }}">
+            <div style="margin-top:14px;display:flex;align-items:center;justify-content:space-between;gap:14px;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:20px 22px">
+              <div>
+                <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">nota final</div>
+                <div style="font-family:Caveat,cursive;font-size:26px;color:#BC2A22">{{ assinatura }}</div>
+              </div>
+              <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:92px;height:66px;flex:0 0 92px">
+                <svg viewBox="0 0 100 72" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible"><path d="M52 7 C80 6 96 21 94 37 C92 53 70 66 45 65 C20 64 5 50 7 33 C9 17 29 7 57 8 C68 8 78 11 85 16" fill="none" stroke="{{ corNota }}" stroke-width="2.2" stroke-linecap="round"></path></svg>
+                <span style="position:relative;font-family:Caveat,cursive;font-size:32px;font-weight:700;color:{{ corNota }}">{{ notaTexto }}</span>
+              </span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaPessoas }}">
+        <div data-screen-label="Pessoas">
+          <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
+            <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+            <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">caderno de pessoas</div>
+            <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:38px;line-height:1;color:#35332B">Participantes</h1>
+            <div style="margin-top:4px;font-family:Kalam,cursive;font-size:16px;color:#5c574a">nota média por pessoa, missão por missão.</div>
+          </div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px">
+            <sc-for list="{{ pessoas }}" as="p" hint-placeholder-count="6">
+              <button onClick="{{ p.abrir }}" style="flex:1 1 300px;min-width:0;text-align:left;border:none;padding:0;background:transparent;cursor:pointer">
+                <div style="display:flex;align-items:center;gap:14px;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 22px rgba(0,0,0,.3);padding:16px 18px">
+                  <span style="flex:0 0 48px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:2px solid #35332B;border-radius:50% 46% 52% 48%;font-family:Caveat,cursive;font-size:20px;font-weight:700;color:#35332B">{{ p.iniciais }}</span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-family:Caveat,cursive;font-size:25px;font-weight:700;line-height:1.1;color:#35332B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.nome }}</div>
+                    <div style="font-family:Kalam,cursive;font-size:15px;color:#5c574a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.funcao }}</div>
+                    <div style="margin-top:2px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ p.meta }}</div>
+                  </div>
+                  <span style="font-family:Caveat,cursive;font-size:27px;font-weight:700;color:{{ p.corMedia }}">{{ p.mediaTexto }}</span>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaPessoa }}">
+        <div data-screen-label="Pessoa">
+          <button onClick="{{ irPessoas }}" style="margin-bottom:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← pessoas</button>
+
+          <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
+            <div style="flex:1 1 330px;min-width:0;position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
+              <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+              <h1 style="margin:0;font-family:Caveat,cursive;font-weight:700;font-size:36px;line-height:1;color:#35332B">{{ pNome }}</h1>
+              <input class="cn" value="{{ pFuncao }}" onChange="{{ setFuncao }}" placeholder="o que faz no time" style="width:100%;margin-top:4px;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:17px;color:#1F3C88" />
+              <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px">
+                <div style="flex:1 1 140px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">telefone</div>
+                  <input class="cn" value="{{ pTelefone }}" onChange="{{ setTelefone }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(0,0,0,.15);outline:none;font-family:Kalam,cursive;font-size:16px;color:#35332B" />
+                </div>
+                <div style="flex:1 1 180px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">e-mail</div>
+                  <input class="cn" value="{{ pEmail }}" onChange="{{ setEmail }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(0,0,0,.15);outline:none;font-family:Kalam,cursive;font-size:16px;color:#35332B" />
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:20px">
+                <div>
+                  <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;line-height:1;color:#35332B">{{ pTotal }}</div>
+                  <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F">missões</div>
+                </div>
+                <div>
+                  <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;line-height:1;color:{{ pCorMedia }}">{{ pMedia }}</div>
+                  <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F">nota média</div>
+                </div>
+                <div>
+                  <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;line-height:1;color:{{ pCorTaxa }}">{{ pTaxa }}</div>
+                  <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F">execução</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:14px">
+              <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:18px 20px 18px 46px">
+                <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+                <div style="font-family:Caveat,cursive;font-size:26px;font-weight:700;color:#35332B">Missões</div>
+                <sc-for list="{{ pMissoes }}" as="m" hint-placeholder-count="3">
+                  <button onClick="{{ m.abrir }}" style="display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:8px 0;border:none;border-bottom:1px dotted rgba(0,0,0,.12);background:transparent;cursor:pointer;text-align:left">
+                    <span style="min-width:0">
+                      <span style="display:block;font-family:Kalam,cursive;font-size:17px;color:#35332B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ m.titulo }}</span>
+                      <span style="display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ m.data }}</span>
+                    </span>
+                    <span style="font-family:Caveat,cursive;font-size:24px;font-weight:700;color:{{ m.cor }}">{{ m.valor }}</span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <div style="position:relative;overflow:hidden;border-radius:3px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 10px 24px rgba(0,0,0,.3);padding:18px 20px 18px 46px">
+                <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+                <div style="font-family:Caveat,cursive;font-size:26px;font-weight:700;color:#35332B">Anotações</div>
+                <div style="display:flex;align-items:flex-end;gap:10px;margin-top:8px">
+                  <input class="cn" value="{{ novaNota }}" onChange="{{ setNovaNota }}" placeholder="registrar observação" style="flex:1;min-width:0;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:17px;color:#1F3C88" />
+                  <button onClick="{{ anotar }}" style="flex:0 0 auto;padding:7px 15px;min-height:40px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">anotar</button>
+                </div>
+                <sc-for list="{{ pNotas }}" as="n" hint-placeholder-count="2">
+                  <div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dotted rgba(0,0,0,.1)">
+                    <div style="flex:1;min-width:0">
+                      <div style="font-family:Kalam,cursive;font-size:17px;line-height:1.4;color:#35332B">{{ n.texto }}</div>
+                      <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ n.data }}</div>
+                    </div>
+                    <button onClick="{{ n.remover }}" style="border:none;background:transparent;cursor:pointer;color:#96907F;font-family:Kalam,cursive;font-size:14px;padding:4px">✕</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaInventario }}">
+        <div data-screen-label="Inventário">
+          <div style="position:relative;padding-top:26px">
+            <div style="border-radius:9px;padding:30px 12px 12px;background:linear-gradient(160deg,#6E5334 0%,#4A3722 100%);box-shadow:0 18px 40px rgba(0,0,0,.45)">
+              <div style="position:relative;overflow:hidden;border-radius:2px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;padding:24px 22px 24px 48px">
+                <div style="position:absolute;top:0;bottom:0;left:36px;width:1px;background:#DDA0A0"></div>
+                <h1 style="margin:0;font-family:Caveat,cursive;font-weight:700;font-size:34px;line-height:1;color:#35332B">Inventário</h1>
+                <div style="font-family:Kalam,cursive;font-size:16px;color:{{ corFaltando }}">{{ textoFaltando }}</div>
+                <input class="cn" value="{{ busca }}" onChange="{{ setBusca }}" placeholder="procurar item ou lugar" style="width:100%;margin-top:14px;padding:3px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:17px;color:#1F3C88" />
+
+                <div style="display:flex;flex-wrap:wrap;gap:22px;margin-top:20px;align-items:flex-start">
+                  <sc-for list="{{ grupos }}" as="g" hint-placeholder-count="4">
+                    <div style="flex:1 1 300px;min-width:0">
+                      <div style="font-family:Caveat,cursive;font-size:22px;font-weight:700;color:#35332B;border-bottom:1.5px solid #DDA0A0;padding-bottom:2px">{{ g.local }}</div>
+                      <sc-for list="{{ g.itens }}" as="i" hint-placeholder-count="3">
+                        <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dotted rgba(0,0,0,.12)">
+                          <div style="flex:1;min-width:0">
+                            <div style="font-family:Kalam,cursive;font-size:17px;font-weight:700;color:{{ i.cor }}">{{ i.nome }}</div>
+                            <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ i.label }} · mín. {{ i.minimo }}</div>
+                          </div>
+                          <div style="display:flex;align-items:center;gap:4px;flex:0 0 auto">
+                            <button onClick="{{ i.menos }}" style="width:32px;height:32px;border:1px solid rgba(0,0,0,.15);border-radius:8px 6px 9px 5px;background:transparent;cursor:pointer;font-family:Caveat,cursive;font-size:20px;color:#35332B">−</button>
+                            <span style="min-width:34px;text-align:center;font-family:Caveat,cursive;font-size:26px;font-weight:700;color:{{ i.cor }}">{{ i.qtd }}</span>
+                            <button onClick="{{ i.mais }}" style="width:32px;height:32px;border:1px solid rgba(0,0,0,.15);border-radius:8px 6px 9px 5px;background:transparent;cursor:pointer;font-family:Caveat,cursive;font-size:20px;color:#35332B">+</button>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;margin-top:22px">
+                  <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">atualizado em {{ hoje }}</div>
+                  <div style="display:flex;gap:14px">
+                    <sc-for list="{{ legenda }}" as="l" hint-placeholder-count="3">
+                      <span style="display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F"><span style="width:9px;height:9px;border-radius:9px;background:{{ l.cor }}"></span>{{ l.label }}</span>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:center;pointer-events:none">
+              <svg width="132" height="54" viewBox="0 0 132 54"><rect x="6" y="16" width="120" height="26" rx="6" fill="#8A9199"></rect><rect x="4" y="12" width="120" height="26" rx="6" fill="#C6CBD1"></rect><rect x="4" y="12" width="120" height="9" rx="4" fill="#E4E8EC"></rect><rect x="38" y="0" width="52" height="16" rx="7" fill="#8A9199"></rect><rect x="40" y="2" width="48" height="12" rx="6" fill="#C6CBD1"></rect></svg>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ telaEscanear }}">
+        <div data-screen-label="Escanear">
+          <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 24px 46px">
+            <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+            <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">ficha em papel</div>
+            <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:36px;line-height:1;color:#35332B">Escanear ficha</h1>
+            <div style="margin-top:4px;font-family:Kalam,cursive;font-size:17px;line-height:1.45;color:#35332B;max-width:46ch">fotografe a folha inteira, sem sombra. o app lê fases, passos, marcações, nota e quem assinou.</div>
+
+            <sc-if value="{{ scanVazio }}">
+              <button onClick="{{ tirarFoto }}" style="width:100%;margin-top:18px;padding:44px 20px;border:2px dashed #1F3C88;border-radius:10px;background:transparent;cursor:pointer">
+                <div style="font-family:Caveat,cursive;font-size:29px;color:#1F3C88">tirar foto da ficha</div>
+                <div style="font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;margin-top:4px">ou escolher da galeria</div>
+              </button>
+            </sc-if>
+
+            <sc-if value="{{ temFoto }}">
+              <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+                <div style="flex:1 1 240px;min-width:0">
+                  <div style="height:220px;border:1px solid #96907F;border-radius:4px;display:flex;align-items:center;justify-content:center;background:repeating-linear-gradient(135deg,#EAE3CF 0 8px,#E1D9C2 8px 16px)">
+                    <span style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:.1em;color:#8b8471">foto da ficha</span>
+                  </div>
+                </div>
+                <div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:8px">
+                  <button onClick="{{ lerFicha }}" style="padding:11px 18px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">{{ rotuloLer }}</button>
+                  <button onClick="{{ trocarFoto }}" style="padding:11px 18px;min-height:44px;border:1.5px solid #35332B;border-radius:15px 10px 17px 9px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">trocar foto</button>
+                  <div style="font-family:Kalam,cursive;font-size:15px;line-height:1.4;color:#96907F">a leitura vem como rascunho. nada entra no caderno antes de você conferir.</div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+
+          <sc-if value="{{ scanPronto }}">
+            <div style="margin-top:14px;position:relative;overflow:hidden;border-radius:3px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:20px 22px 24px 46px">
+              <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
+              <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#BC2A22">confira antes de salvar</div>
+              <div style="display:flex;flex-wrap:wrap;gap:16px;margin-top:12px">
+                <div style="flex:1 1 200px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">participante</div>
+                  <input class="cn" value="{{ dParticipante }}" onChange="{{ setDParticipante }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+                </div>
+                <div style="flex:0 1 130px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">data</div>
+                  <input class="cn" value="{{ dData }}" onChange="{{ setDData }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+                </div>
+                <div style="flex:1 1 200px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">título</div>
+                  <input class="cn" value="{{ dTitulo }}" onChange="{{ setDTitulo }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+                </div>
+                <div style="flex:1 1 150px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">avaliador</div>
+                  <input class="cn" value="{{ dAvaliador }}" onChange="{{ setDAvaliador }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(188,42,34,.35);outline:none;font-family:Caveat,cursive;font-size:22px;color:#BC2A22" />
+                </div>
+                <div style="flex:0 1 90px">
+                  <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">nota</div>
+                  <input class="cn" value="{{ dNota }}" onChange="{{ setDNota }}" style="width:100%;padding:2px 0;background:transparent;border:none;border-bottom:1px dotted rgba(0,0,0,.15);outline:none;font-family:Caveat,cursive;font-size:24px;font-weight:700;color:{{ dCorNota }}" />
+                </div>
+              </div>
+
+              <sc-if value="{{ dNovaPessoa }}">
+                <div style="margin-top:12px;font-family:Kalam,cursive;font-size:16px;color:#A9670A">{{ dParticipante }} ainda não está no caderno — vou criar a ficha dele.</div>
+              </sc-if>
+
+              <div style="display:flex;flex-wrap:wrap;gap:20px;margin-top:18px">
+                <sc-for list="{{ draftFases }}" as="f" hint-placeholder-count="2">
+                  <div style="flex:1 1 280px;min-width:0">
+                    <div style="font-family:Caveat,cursive;font-size:24px;font-weight:700;color:#35332B">{{ f.nome }}</div>
+                    <sc-for list="{{ f.passos }}" as="p" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:flex-start;gap:9px;padding:5px 0">
+                        <span style="font-family:Kalam,cursive;font-size:18px;font-weight:700;color:{{ p.cor }}">{{ p.marca }}</span>
+                        <div style="flex:1;min-width:0">
+                          <div style="font-family:Kalam,cursive;font-size:16px;line-height:1.4;color:{{ p.corTexto }}">{{ p.texto }}</div>
+                          <sc-if value="{{ p.temObs }}">
+                            <div style="font-family:Caveat,cursive;font-size:19px;color:{{ p.cor }}">{{ p.obs }}</div>
+                          </sc-if>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+
+              <button onClick="{{ salvarDraft }}" style="margin-top:20px;padding:11px 20px;min-height:44px;border:1.5px solid #157A45;border-radius:15px 10px 17px 9px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">salvar missão</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <sc-if value="{{ ehCelular }}">
+      <div style="position:fixed;left:0;right:0;bottom:0;z-index:40;background:linear-gradient(180deg,#6E5334 0%,#4A3722 100%);box-shadow:0 -8px 24px rgba(0,0,0,.4)">
+        <div style="margin:0 auto;max-width:412px;display:flex">
+          <sc-for list="{{ navs }}" as="n" hint-placeholder-count="4">
+            <button onClick="{{ n.ir }}" style="flex:1;min-height:56px;display:flex;align-items:center;justify-content:center;border:none;background:transparent;cursor:pointer;padding:8px 2px">
+              <span style="position:relative;display:inline-flex;align-items:center;justify-content:center;padding:0 6px">
+                <sc-if value="{{ n.ativo }}">
+                  <svg viewBox="0 0 100 72" style="position:absolute;left:-8px;right:-8px;top:-9px;bottom:-9px;width:auto;height:auto;overflow:visible"><path d="M52 7 C80 6 96 21 94 37 C92 53 70 66 45 65 C20 64 5 50 7 33 C9 17 29 7 57 8 C68 8 78 11 85 16" fill="none" stroke="#F6F1E3" stroke-width="2.4" stroke-linecap="round" vector-effect="non-scaling-stroke"></path></svg>
+                </sc-if>
+                <span style="position:relative;font-family:Caveat,cursive;font-size:20px;font-weight:700;color:{{ n.cor }}">{{ n.label }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ modalEnviar }}">
+    <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,10,.72)">
+      <div style="width:100%;max-width:420px;max-height:88vh;overflow:auto;border-radius:3px;background:#F6F1E3;box-shadow:0 24px 60px rgba(0,0,0,.5);padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+          <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;color:#35332B">Enviar missão</div>
+          <button onClick="{{ fecharModal }}" style="border:none;background:transparent;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;padding:6px">fechar ✕</button>
+        </div>
+        <div style="margin-top:8px;font-family:Kalam,cursive;font-size:16px;line-height:1.5;color:#35332B">O PDF é a ficha inteira em uma folha — fases, marcações, anotações e nota. Ele é montado aqui no aparelho: não sobe pra lugar nenhum e não custa nada.</div>
+        <button onClick="{{ baixarPdf }}" style="width:100%;margin-top:16px;padding:11px;min-height:44px;border:1.5px solid #1F3C88;border-radius:15px 10px 17px 9px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">gerar PDF e enviar</button>
+        <div style="margin-top:18px;padding-top:16px;border-top:1px dotted #96907F">
+          <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">ou mande o link de acompanhamento</div>
+          <div style="margin-top:8px;padding:9px 11px;border:1.5px dashed #1F3C88;border-radius:8px;word-break:break-all;font-family:'Courier New',monospace;font-size:12px;color:#1F3C88">{{ link }}</div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button onClick="{{ copiar }}" style="flex:1;padding:10px;min-height:44px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:transparent;color:#1F3C88;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">{{ rotuloCopiar }}</button>
+            <button onClick="{{ verAcompanhar }}" style="flex:1;padding:10px;min-height:44px;border:1.5px solid #35332B;border-radius:14px 9px 15px 8px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">ver prévia</button>
+          </div>
+          <button onClick="{{ revogar }}" style="margin-top:10px;border:none;background:transparent;cursor:pointer;padding:6px 0;font-family:Kalam,cursive;font-size:15px;color:#BC2A22">revogar e gerar outro link</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ temToast }}">
+    <div style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);z-index:70;padding:9px 18px;border-radius:20px;background:#F6F1E3;box-shadow:0 10px 30px rgba(0,0,0,.45);font-family:Kalam,cursive;font-size:16px;color:#24211C;animation:sobe .18s ease-out">{{ toast }}</div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;densidadeInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;celular&quot;,&quot;desktop&quot;],&quot;default&quot;:&quot;celular&quot;,&quot;tsType&quot;:&quot;'celular'|'desktop'&quot;,&quot;section&quot;:&quot;Protótipo&quot;},&quot;estiloMarca&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;caneta&quot;,&quot;carimbo&quot;],&quot;default&quot;:&quot;caneta&quot;,&quot;tsType&quot;:&quot;'caneta'|'carimbo'&quot;,&quot;section&quot;:&quot;Ficha&quot;},&quot;notaVisivel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Acompanhamento&quot;},&quot;dominio&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://missoes.vercel.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Acompanhamento&quot;}}">
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const d = this.seed();
+    this.state = {
+      pessoas: d.pessoas, missoes: d.missoes, inventario: d.inventario,
+      rota: { nome: "inicio", id: null },
+      dens: p.densidadeInicial === "desktop" ? "desktop" : "celular",
+      filtro: "abertas", busca: "", novaNota: "", modal: null, copiado: false,
+      scan: "vazio", draft: null, toast: "",
+      novo: { pessoaId: "", titulo: "", data: this.hoje() }
+    };
+  }
+
+  /* ---------- básico ---------- */
+  hoje() { const d = new Date(), p = (n) => String(n).padStart(2, "0"); return p(d.getDate()) + "/" + p(d.getMonth() + 1) + "/" + d.getFullYear(); }
+  get S() {
+    return {
+      ok: { label: "conseguiu", mark: "✓", cor: "#157A45" },
+      parcial: { label: "em partes", mark: "~", cor: "#A9670A" },
+      falhou: { label: "não conseguiu", mark: "✗", cor: "#BC2A22" },
+      pendente: { label: "pendente", mark: "○", cor: "#96907F" }
+    };
+  }
+  ir(nome, id) { this.setState({ rota: { nome: nome, id: id || null }, modal: null }); if (window.scrollTo) window.scrollTo({ top: 0 }); }
+  aviso(t) { this.setState({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: "" }), 2200); }
+  componentWillUnmount() { clearTimeout(this._t); clearTimeout(this._s); }
+
+  prog(m) {
+    const W = { ok: 1, parcial: 0.5, falhou: 0, pendente: 0 };
+    const ps = (m.fases || []).reduce((a, f) => a.concat(f.passos || []), []);
+    const soma = ps.reduce((a, x) => a + (W[x.status] || 0), 0);
+    return { pct: ps.length ? Math.round((soma / ps.length) * 100) : 0, total: ps.length };
+  }
+  cPct(p) { return p >= 80 ? "#157A45" : p >= 45 ? "#A9670A" : "#BC2A22"; }
+  cNota(n) { return typeof n !== "number" ? "#96907F" : n >= 7 ? "#157A45" : n >= 5 ? "#A9670A" : "#BC2A22"; }
+  iniciais(n) { return (n || "?").trim().split(/\s+/).slice(0, 2).map((x) => x[0]).join("").toUpperCase(); }
+  resumo(pe) {
+    const minhas = this.state.missoes.filter((m) => m.pessoaId === pe.id);
+    const notas = minhas.filter((m) => typeof m.nota === "number").map((m) => m.nota);
+    const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : null;
+    const W = { ok: 1, parcial: 0.5, falhou: 0, pendente: 0 };
+    const ps = minhas.reduce((a, m) => a.concat((m.fases || []).reduce((b, f) => b.concat(f.passos || []), [])), []);
+    const taxa = ps.length ? Math.round((ps.reduce((a, x) => a + (W[x.status] || 0), 0) / ps.length) * 100) : null;
+    return { minhas: minhas, total: minhas.length, abertas: minhas.filter((m) => !m.fechada).length, media: media, taxa: taxa };
+  }
+  novoId(p) { this._n = (this._n || 0) + 1; return p + "-" + this._n + "-" + Date.now().toString(36); }
+
+  /* ---------- gravação ---------- */
+  salvaM(m) { this.setState((s) => ({ missoes: s.missoes.map((x) => (x.id === m.id ? m : x)) })); }
+  patchFase(m, fid, patch) { this.salvaM(Object.assign({}, m, { fases: m.fases.map((f) => (f.id === fid ? Object.assign({}, f, patch) : f)) })); }
+  patchPasso(m, fid, pid, patch) {
+    this.patchFase(m, fid, { passos: m.fases.find((f) => f.id === fid).passos.map((x) => (x.id === pid ? Object.assign({}, x, patch) : x)) });
+  }
+  salvaP(pe) { this.setState((s) => ({ pessoas: s.pessoas.map((x) => (x.id === pe.id ? pe : x)) })); }
+
+  /* ---------- dados ---------- */
+  seed() {
+    let n = 0;
+    const id = (p) => p + ++n;
+    const P = (texto, status, obs) => ({ id: id("s"), texto: texto, obs: obs || "", status: status || "pendente" });
+    const F = (nome, prazo, passos) => ({ id: id("f"), nome: nome, prazo: prazo, passos: passos });
+    const pes = (nome, funcao, telefone, email, entrada, notas) => ({
+      id: id("p"), nome: nome, funcao: funcao, telefone: telefone, email: email, entrada: entrada,
+      notas: (notas || []).map((x) => ({ id: id("n"), data: x[0], texto: x[1] }))
+    });
+    const pedro = pes("Pedro Henrique", "Captação e conteúdo", "(11) 94422-1180", "pedro@babel.com.br", "04/08/2026", [
+      ["19/08/2026", "melhorou muito na comunicação com o time — ainda trava em tarefa que depende de terceiro"],
+      ["15/08/2026", "chegou 20 min atrasado nas gravações de quinta"]
+    ]);
+    const larissa = pes("Larissa Prado", "Social e tráfego", "(11) 98871-3320", "larissa@babel.com.br", "12/05/2026", [
+      ["18/08/2026", "puxa a fila sozinha. dar mais autonomia de verba"]
+    ]);
+    const caio = pes("Caio Mendes", "Estúdio e equipamento", "(11) 99120-4477", "caio@babel.com.br", "02/06/2026", []);
+    const bruna = pes("Bruna Tavares", "Roteiro e edição", "(11) 97744-0912", "bruna@babel.com.br", "20/06/2026", [
+      ["17/08/2026", "entrega bem escrito, mas sempre no limite do prazo"]
+    ]);
+    const rafael = pes("Rafael Duarte", "SDR", "(11) 96650-2231", "rafael@babel.com.br", "28/07/2026", [
+      ["19/08/2026", "trava na hora de ligar. treinar abordagem por telefone antes da próxima missão"]
+    ]);
+    const yasmin = pes("Yasmin Costa", "Operação e onboarding", "(11) 98003-7745", "yasmin@babel.com.br", "01/08/2026", []);
+    const missao = (pe, titulo, data, fases, nota, avaliador) => ({
+      id: id("m"), token: id("tk") + "a7f3c9d1", pessoaId: pe.id, titulo: titulo, data: data,
+      nota: typeof nota === "number" ? nota : null, avaliador: avaliador || "", fechada: typeof nota === "number", fases: fases
+    });
+    const missoes = [
+      missao(pedro, "Missão Pedro Henrique", "18/08/2026", [
+        F("Fase 1", "19h", [
+          P("Falar com Marcos para ver acesso aos e-mails profissionais", "ok"),
+          P("Com os e-mails, criar as contas do TikTok e do Kawai", "falhou", "não conseguiu"),
+          P("Coordenar gravações com os meninos", "ok", "sem atrapalhar o desenvolvimento deles"),
+          P("Pesquisar a palavra COORDENAR (agora → organizar)")
+        ]),
+        F("Fase 2 · Captação estratégica", "até o fim", [
+          P("P1 · Documentário: contar a história, documentar o que está acontecendo", "parcial", "conseguiu em partes!"),
+          P("P2 · Vídeos virais: curtos, engraçados, conexão", "pendente", "ainda não deu tempo!")
+        ]),
+        F("Fase 3 · Entrega", "", [P("Seguir as orientações do guia que foi entregue", "falhou", "não conseguiu!")])
+      ], 6, "Adrian S."),
+      missao(pedro, "Captação — semana 2", "19/08/2026", [
+        F("Fase 1 · Preparação", "14h", [
+          P("Separar equipamento pela lista do inventário", "ok"),
+          P("Confirmar horário com os meninos", "ok"),
+          P("Testar áudio da lapela antes de sair")
+        ]),
+        F("Fase 2 · Gravação", "até sexta", [
+          P("Gravar 3 blocos do documentário", "parcial", "só deu 1 bloco"),
+          P("Registrar os bastidores")
+        ])
+      ]),
+      missao(larissa, "Funil do Instagram", "12/08/2026", [
+        F("Fase 1 · Estrutura", "3 dias", [P("Mapear as 5 dores principais", "ok"), P("Escrever 10 ganchos de abertura", "ok")]),
+        F("Fase 2 · Publicação", "até domingo", [
+          P("Postar 5 reels na semana", "ok"),
+          P("Responder todos os comentários em 24h", "parcial", "faltou o fim de semana")
+        ])
+      ], 9, "Adrian S."),
+      missao(larissa, "Campanha de agosto", "19/08/2026", [
+        F("Fase 1 · Preparação", "segunda", [P("Escolher os 3 criativos", "ok"), P("Fechar a verba com o financeiro"), P("Subir os públicos")])
+      ]),
+      missao(caio, "Montagem do estúdio", "14/08/2026", [
+        F("Fase 1 · Sala", "2 dias", [
+          P("Instalar a iluminação de fundo", "ok"),
+          P("Tratar o eco com espuma", "ok"),
+          P("Organizar os cabos por cor", "parcial", "faltou o rack")
+        ]),
+        F("Fase 2 · Entrega", "", [P("Fotografar o setup pronto e mandar no grupo", "ok")])
+      ], 8.5, "Adrian S."),
+      missao(bruna, "Roteiro do documentário", "16/08/2026", [
+        F("Fase 1 · Pesquisa", "1 semana", [
+          P("Entrevistar 3 pessoas do time", "ok"),
+          P("Levantar arquivo de imagens antigas", "ok"),
+          P("Montar a linha do tempo", "parcial", "metade")
+        ]),
+        F("Fase 2 · Escrita", "até o fim do mês", [P("Escrever o ato 1"), P("Revisar com a direção")])
+      ]),
+      missao(rafael, "Prospecção fria — 50 contatos", "18/08/2026", [
+        F("Fase 1 · Lista", "18h", [
+          P("Levantar 50 contatos qualificados", "parcial", "chegou a 28"),
+          P("Validar os telefones antes de ligar", "falhou", "não conseguiu")
+        ]),
+        F("Fase 2 · Abordagem", "até quinta", [
+          P("Ligar para os 50 da lista", "falhou", "ligou para 12"),
+          P("Registrar cada retorno na ficha", "ok")
+        ])
+      ], 4.5, "Adrian S."),
+      missao(yasmin, "Onboarding dos novos", "19/08/2026", [
+        F("Fase 1 · Material", "quarta", [P("Imprimir as fichas de missão", "ok"), P("Preparar as pranchetas"), P("Separar os crachás")]),
+        F("Fase 2 · Primeiro dia", "segunda", [P("Apresentar o método"), P("Rodar a primeira missão com cada um")])
+      ])
+    ];
+    const it = (nome, local, qtd, minimo) => ({ id: id("i"), nome: nome, local: local, qtd: qtd, minimo: minimo });
+    return {
+      pessoas: [pedro, larissa, caio, bruna, rafael, yasmin],
+      missoes: missoes,
+      inventario: [
+        it("Cabo HDMI 3m", "Estúdio", 0, 1), it("Softbox 60cm", "Estúdio", 2, 2), it("Tripé de chão", "Estúdio", 3, 1),
+        it("Cartão SD 128GB", "Mochila de gravação", 2, 2), it("Bateria extra da câmera", "Mochila de gravação", 4, 2),
+        it("Microfone de lapela", "Mochila de gravação", 1, 2), it("Pilha AA", "Gaveta da sala", 12, 6),
+        it("Adaptador USB-C", "Gaveta da sala", 0, 2), it("Fone de monitoração", "Gaveta da sala", 2, 1),
+        it("Papel A4", "Almoxarifado", 5, 2), it("Cartucho de tinta preta", "Almoxarifado", 1, 2),
+        it("Prancheta", "Almoxarifado", 14, 4), it("Crachá de visitante", "Recepção", 25, 10)
+      ]
+    };
+  }
+
+  exemploDraft() {
+    const S = this.S;
+    const mk = (texto, status, obs) => ({ texto: texto, status: S[status] ? status : "pendente", obs: obs || "" });
+    return {
+      participante: "Pedro Henrique", titulo: "Missão Pedro Henrique", data: "18/08/2026", nota: 6, avaliador: "Adrian S.",
+      fases: [
+        { nome: "Fase 1 · 19h", passos: [
+          mk("Falar com Marcos para ver acesso aos e-mails profissionais", "ok"),
+          mk("Com os e-mails, criar as contas do TikTok e do Kawai", "falhou", "não conseguiu"),
+          mk("Coordenar gravações com os meninos", "ok", "sem atrapalhar o desenvolvimento deles")
+        ] },
+        { nome: "Fase 2 · Captação estratégica", passos: [
+          mk("P1 · Documentário: contar a história", "parcial", "conseguiu em partes!"),
+          mk("P2 · Vídeos virais: curtos, engraçados, conexão", "pendente", "ainda não deu tempo!")
+        ] }
+      ]
+    };
+  }
+
+  /* ---------- render ---------- */
+  renderVals() {
+    const st = this.state, S = this.S, ehD = st.dens === "desktop";
+    const carimbo = (this.props.estiloMarca || "caneta") === "carimbo";
+    const v = {
+      ehDesktop: ehD, ehCelular: !ehD, maxW: ehD ? "1180px" : "412px", hoje: this.hoje(),
+      marcaCaneta: !carimbo, marcaCarimbo: carimbo,
+      toast: st.toast, temToast: !!st.toast,
+      irMissoes: () => this.ir("missoes"), irEscanear: () => this.ir("escanear"), irPessoas: () => this.ir("pessoas"),
+      densidades: [["celular", "celular"], ["desktop", "desktop"]].map((x) => ({
+        label: x[1], sel: () => this.setState({ dens: x[0] }),
+        bg: st.dens === x[0] ? "#F6F1E3" : "transparent", cor: st.dens === x[0] ? "#24211C" : "rgba(246,241,227,.6)"
+      })),
+      passosInicio: [
+        { n: "1", titulo: "Escreva a missão", texto: "fases, passos e prazo numa ficha só. a folha é entregue na mão." },
+        { n: "2", titulo: "Marque na hora", texto: "conseguiu, em partes, não conseguiu. a anotação vermelha é do avaliador." },
+        { n: "3", titulo: "Feche com nota", texto: "a nota vai circulada, a ficha vira PDF e entra no caderno da pessoa." }
+      ]
+    };
+    ["inicio", "missoes", "missao", "ficha", "acompanhar", "pessoas", "pessoa", "inventario", "escanear"].forEach((n) => {
+      v["tela" + n[0].toUpperCase() + n.slice(1)] = st.rota.nome === n;
+    });
+
+    const abas = [["missoes", "Missões"], ["inventario", "Inventário"], ["escanear", "Escanear"], ["pessoas", "Pessoas"]];
+    const eq = { missao: "missoes", ficha: "missoes", acompanhar: "missoes", pessoa: "pessoas" };
+    const ativa = eq[st.rota.nome] || st.rota.nome;
+    v.navs = abas.map((x) => ({ label: x[1], ativo: ativa === x[0], ir: () => this.ir(x[0]), cor: ativa === x[0] ? "#F6F1E3" : "rgba(246,241,227,.5)" }));
+    v.railNavs = [["inicio", "Como funciona"]].concat(abas).map((x) => ({
+      label: x[1], ir: () => this.ir(x[0]),
+      bg: ativa === x[0] ? "rgba(246,241,227,.12)" : "transparent",
+      borda: ativa === x[0] ? "#F6F1E3" : "transparent",
+      cor: ativa === x[0] ? "#F6F1E3" : "rgba(246,241,227,.62)"
+    }));
+
+    /* missões */
+    const notas = st.missoes.filter((m) => typeof m.nota === "number").map((m) => m.nota);
+    const media = notas.length ? notas.reduce((a, b) => a + b, 0) / notas.length : null;
+    v.abertas = st.missoes.filter((m) => !m.fechada).length;
+    v.totalM = st.missoes.length;
+    v.mediaTexto = media === null ? "—" : media.toFixed(1);
+    v.corMedia = this.cNota(media);
+    v.filtros = [["abertas", "abertas"], ["fechadas", "fechadas"], ["todas", "todas"]].map((x) => ({
+      label: x[1], sel: () => this.setState({ filtro: x[0] }),
+      bg: st.filtro === x[0] ? "#1F3C88" : "transparent", cor: st.filtro === x[0] ? "#F6F1E3" : "#1F3C88"
+    }));
+    let lista = st.missoes.slice().reverse();
+    if (st.filtro === "abertas") lista = lista.filter((m) => !m.fechada);
+    if (st.filtro === "fechadas") lista = lista.filter((m) => m.fechada);
+    v.cards = lista.map((m) => {
+      const p = this.prog(m), pe = st.pessoas.find((x) => x.id === m.pessoaId), tem = typeof m.nota === "number";
+      return {
+        nome: pe ? pe.nome : m.titulo, titulo: m.titulo,
+        estado: (m.fechada ? "fechada" : "em andamento") + " · " + m.data,
+        corEstado: m.fechada ? "#96907F" : "#BC2A22",
+        meta: m.fases.length + " fases · " + p.total + " passos",
+        pctTexto: p.pct + "%", pctCss: p.pct + "%", cor: this.cPct(p.pct),
+        temNota: tem, semNota: !tem, notaTexto: tem ? m.nota.toFixed(1) : "—", corNota: this.cNota(m.nota),
+        abrir: () => this.ir("missao", m.id)
+      };
+    });
+    v.listaVazia = !v.cards.length;
+
+    v.novoAberto = st.modal === "novo";
+    v.abrirNovo = () => this.setState({ modal: st.modal === "novo" ? null : "novo" });
+    v.novoTitulo = st.novo.titulo;
+    v.setNovoTitulo = (e) => this.setState({ novo: Object.assign({}, st.novo, { titulo: e.target.value }) });
+    v.novoData = st.novo.data;
+    v.setNovoData = (e) => this.setState({ novo: Object.assign({}, st.novo, { data: e.target.value }) });
+    v.chips = st.pessoas.map((pe) => ({
+      nome: pe.nome, sel: () => this.setState({ novo: Object.assign({}, st.novo, { pessoaId: pe.id }) }),
+      bg: st.novo.pessoaId === pe.id ? "#1F3C88" : "transparent", cor: st.novo.pessoaId === pe.id ? "#F6F1E3" : "#1F3C88"
+    }));
+    v.criar = () => {
+      const pid = st.novo.pessoaId || st.pessoas[0].id;
+      const nova = {
+        id: this.novoId("m"), token: this.novoId("tk"), pessoaId: pid, titulo: st.novo.titulo || "Missão",
+        data: st.novo.data, nota: null, avaliador: "", fechada: false,
+        fases: [{ id: this.novoId("f"), nome: "Fase 1", prazo: "", passos: [{ id: this.novoId("s"), texto: "", obs: "", status: "pendente" }] }]
+      };
+      this.setState({ missoes: st.missoes.concat([nova]), modal: null, novo: { pessoaId: "", titulo: "", data: this.hoje() }, rota: { nome: "missao", id: nova.id } });
+    };
+
+    /* missão aberta */
+    const m = st.missoes.find((x) => x.id === st.rota.id);
+    if (m) {
+      const pe = st.pessoas.find((x) => x.id === m.pessoaId), p = this.prog(m);
+      const todos = m.fases.reduce((a, f) => a.concat(f.passos || []), []);
+      v.mNome = pe ? pe.nome : m.titulo;
+      v.mTitulo = m.titulo; v.mData = m.data;
+      v.mEstado = m.fechada ? "fechada" : "em andamento";
+      v.mCorEstado = m.fechada ? "#96907F" : "#BC2A22";
+      v.mPct = p.pct + "%"; v.mPctCss = p.pct + "%"; v.mCorPct = this.cPct(p.pct);
+      v.mTotalPassos = p.total; v.mQtdFases = m.fases.length;
+      v.contagens = ["ok", "parcial", "falhou"].map((k) => ({ n: todos.filter((x) => x.status === k).length, label: S[k].label, cor: S[k].cor }));
+      v.setTitulo = (e) => this.salvaM(Object.assign({}, m, { titulo: e.target.value }));
+      v.notaValor = typeof m.nota === "number" ? m.nota : 0;
+      v.notaTexto = typeof m.nota === "number" ? m.nota.toFixed(1) : "—";
+      v.corNota = this.cNota(m.nota);
+      v.setNota = (e) => this.salvaM(Object.assign({}, m, { nota: parseFloat(e.target.value) }));
+      v.avaliador = m.avaliador || "";
+      v.assinatura = m.avaliador || "sem assinatura";
+      v.setAvaliador = (e) => this.salvaM(Object.assign({}, m, { avaliador: e.target.value }));
+      v.rotuloFechar = m.fechada ? "reabrir missão" : "fechar missão";
+      v.corBotaoFechar = m.fechada ? "#35332B" : "#157A45";
+      v.fundoBotaoFechar = m.fechada ? "transparent" : "#157A45";
+      v.textoBotaoFechar = m.fechada ? "#35332B" : "#F6F1E3";
+      v.alternarFechada = () => { this.salvaM(Object.assign({}, m, { fechada: !m.fechada })); this.aviso(m.fechada ? "missão reaberta" : "missão fechada com nota " + (typeof m.nota === "number" ? m.nota.toFixed(1) : "—")); };
+      v.fases = m.fases.map((f) => ({
+        nome: f.nome, prazo: f.prazo || "",
+        setNome: (e) => this.patchFase(m, f.id, { nome: e.target.value }),
+        setPrazo: (e) => this.patchFase(m, f.id, { prazo: e.target.value }),
+        remover: () => this.salvaM(Object.assign({}, m, { fases: m.fases.filter((x) => x.id !== f.id) })),
+        addPasso: () => this.patchFase(m, f.id, { passos: f.passos.concat([{ id: this.novoId("s"), texto: "", obs: "", status: "pendente" }]) }),
+        passos: (f.passos || []).map((x) => {
+          const s = S[x.status] || S.pendente;
+          return {
+            texto: x.texto, obs: x.obs || "", temObs: !!x.obs, marca: s.mark, cor: s.cor,
+            corTexto: x.status === "pendente" ? "#96907F" : "#35332B",
+            rows: Math.max(1, Math.ceil((x.texto || "").length / 34)),
+            setTexto: (e) => this.patchPasso(m, f.id, x.id, { texto: e.target.value }),
+            setObs: (e) => this.patchPasso(m, f.id, x.id, { obs: e.target.value }),
+            remover: () => this.patchFase(m, f.id, { passos: f.passos.filter((y) => y.id !== x.id) }),
+            botoes: ["ok", "parcial", "falhou"].map((k) => ({
+              mark: S[k].mark, label: S[k].label, borda: S[k].cor,
+              bg: x.status === k ? S[k].cor : "transparent", cor: x.status === k ? "#F6F1E3" : S[k].cor,
+              sel: () => this.patchPasso(m, f.id, x.id, { status: x.status === k ? "pendente" : k })
+            }))
+          };
+        })
+      }));
+      v.addFase = () => this.salvaM(Object.assign({}, m, {
+        fases: m.fases.concat([{ id: this.novoId("f"), nome: "Fase " + (m.fases.length + 1), prazo: "", passos: [{ id: this.novoId("s"), texto: "", obs: "", status: "pendente" }] }])
+      }));
+      v.temPessoa = !!pe; v.primeiroNome = pe ? pe.nome.split(" ")[0] : "";
+      v.irPessoa = () => pe && this.ir("pessoa", pe.id);
+      v.verFicha = () => this.ir("ficha", m.id);
+      v.verAcompanhar = () => this.ir("acompanhar", m.id);
+      v.voltarMissao = () => this.ir("missao", m.id);
+      v.link = (this.props.dominio || "https://missoes.vercel.app") + "/m/" + m.token;
+      v.mostraNotaPublica = m.fechada && this.props.notaVisivel !== false;
+      v.baixarPdf = () => this.aviso("PDF montado no aparelho ✓");
+      v.copiar = () => {
+        if (navigator.clipboard) navigator.clipboard.writeText(v.link);
+        this.setState({ copiado: true });
+        clearTimeout(this._c); this._c = setTimeout(() => this.setState({ copiado: false }), 1800);
+      };
+      v.rotuloCopiar = st.copiado ? "copiado ✓" : "copiar link";
+      v.revogar = () => { this.salvaM(Object.assign({}, m, { token: this.novoId("tk") })); this.aviso("link antigo revogado"); };
+    }
+    v.modalEnviar = st.modal === "enviar";
+    v.abrirEnviar = () => this.setState({ modal: "enviar" });
+    v.fecharModal = () => this.setState({ modal: null });
+
+    /* pessoas */
+    v.pessoas = st.pessoas.map((pe) => {
+      const r = this.resumo(pe);
+      return {
+        nome: pe.nome, funcao: pe.funcao || "", iniciais: this.iniciais(pe.nome),
+        meta: r.total + " missões · " + r.abertas + " abertas",
+        mediaTexto: r.media === null ? "—" : r.media.toFixed(1), corMedia: this.cNota(r.media),
+        abrir: () => this.ir("pessoa", pe.id)
+      };
+    });
+    const pa = st.pessoas.find((x) => x.id === st.rota.id);
+    if (pa) {
+      const r = this.resumo(pa);
+      v.pNome = pa.nome; v.pFuncao = pa.funcao || ""; v.pTelefone = pa.telefone || ""; v.pEmail = pa.email || "";
+      v.setFuncao = (e) => this.salvaP(Object.assign({}, pa, { funcao: e.target.value }));
+      v.setTelefone = (e) => this.salvaP(Object.assign({}, pa, { telefone: e.target.value }));
+      v.setEmail = (e) => this.salvaP(Object.assign({}, pa, { email: e.target.value }));
+      v.pTotal = r.total;
+      v.pMedia = r.media === null ? "—" : r.media.toFixed(1); v.pCorMedia = this.cNota(r.media);
+      v.pTaxa = r.taxa === null ? "—" : r.taxa + "%"; v.pCorTaxa = r.taxa === null ? "#96907F" : this.cPct(r.taxa);
+      v.pMissoes = r.minhas.slice().reverse().map((x) => {
+        const p = this.prog(x), tem = typeof x.nota === "number";
+        return { titulo: x.titulo, data: x.data, valor: tem ? x.nota.toFixed(1) : p.pct + "%", cor: tem ? this.cNota(x.nota) : this.cPct(p.pct), abrir: () => this.ir("missao", x.id) };
+      });
+      v.pNotas = (pa.notas || []).map((n) => ({
+        texto: n.texto, data: n.data,
+        remover: () => this.salvaP(Object.assign({}, pa, { notas: pa.notas.filter((y) => y.id !== n.id) }))
+      }));
+      v.novaNota = st.novaNota;
+      v.setNovaNota = (e) => this.setState({ novaNota: e.target.value });
+      v.anotar = () => {
+        if (!st.novaNota.trim()) return;
+        this.salvaP(Object.assign({}, pa, { notas: [{ id: this.novoId("n"), data: this.hoje(), texto: st.novaNota.trim() }].concat(pa.notas || []) }));
+        this.setState({ novaNota: "" });
+      };
+    }
+
+    /* inventário */
+    const sit = (i) => (i.qtd <= 0 ? { label: "acabou", cor: "#BC2A22", falta: true } : i.qtd <= (i.minimo || 0) ? { label: "acabando", cor: "#A9670A", falta: true } : { label: "em estoque", cor: "#157A45", falta: false });
+    const filtrados = st.inventario.filter((i) => (i.nome + " " + (i.local || "")).toLowerCase().indexOf(st.busca.toLowerCase()) >= 0);
+    const locais = [];
+    filtrados.forEach((i) => { const l = i.local || "sem lugar definido"; if (locais.indexOf(l) < 0) locais.push(l); });
+    const mudaItem = (i, patch) => this.setState((s) => ({ inventario: s.inventario.map((x) => (x.id === i.id ? Object.assign({}, x, patch) : x)) }));
+    v.busca = st.busca;
+    v.setBusca = (e) => this.setState({ busca: e.target.value });
+    v.grupos = locais.map((l) => ({
+      local: l,
+      itens: filtrados.filter((i) => (i.local || "sem lugar definido") === l).map((i) => {
+        const s = sit(i);
+        return { nome: i.nome, qtd: i.qtd, minimo: i.minimo, label: s.label, cor: s.cor, mais: () => mudaItem(i, { qtd: i.qtd + 1 }), menos: () => mudaItem(i, { qtd: Math.max(0, i.qtd - 1) }) };
+      })
+    }));
+    const faltando = st.inventario.filter((i) => sit(i).falta).length;
+    v.textoFaltando = faltando ? faltando + (faltando === 1 ? " item precisa" : " itens precisam") + " de atenção" : "tudo em ordem";
+    v.corFaltando = faltando ? "#BC2A22" : "#157A45";
+    v.legenda = [["em estoque", "#157A45"], ["acabando", "#A9670A"], ["acabou", "#BC2A22"]].map((x) => ({ label: x[0], cor: x[1] }));
+
+    /* escanear */
+    v.scanVazio = st.scan === "vazio";
+    v.temFoto = st.scan !== "vazio";
+    v.scanPronto = st.scan === "pronto";
+    v.rotuloLer = st.scan === "lendo" ? "lendo a ficha…" : st.scan === "pronto" ? "ler de novo" : "ler ficha";
+    v.tirarFoto = () => this.setState({ scan: "foto" });
+    v.trocarFoto = () => this.setState({ scan: "vazio", draft: null });
+    v.lerFicha = () => {
+      this.setState({ scan: "lendo" });
+      clearTimeout(this._s);
+      this._s = setTimeout(() => this.setState({ scan: "pronto", draft: this.exemploDraft() }), 1400);
+    };
+    const d = st.draft;
+    if (d) {
+      const setD = (patch) => this.setState({ draft: Object.assign({}, d, patch) });
+      v.dParticipante = d.participante; v.setDParticipante = (e) => setD({ participante: e.target.value });
+      v.dData = d.data; v.setDData = (e) => setD({ data: e.target.value });
+      v.dTitulo = d.titulo; v.setDTitulo = (e) => setD({ titulo: e.target.value });
+      v.dAvaliador = d.avaliador; v.setDAvaliador = (e) => setD({ avaliador: e.target.value });
+      v.dNota = d.nota === null ? "" : String(d.nota);
+      v.dCorNota = this.cNota(d.nota);
+      v.setDNota = (e) => { const t = e.target.value.replace(",", "."); setD({ nota: t === "" ? null : parseFloat(t) }); };
+      v.dNovaPessoa = !!d.participante && !st.pessoas.some((x) => x.nome.toLowerCase() === d.participante.toLowerCase());
+      v.draftFases = d.fases.map((f) => ({
+        nome: f.nome,
+        passos: f.passos.map((x) => {
+          const s = S[x.status] || S.pendente;
+          return { texto: x.texto, obs: x.obs, temObs: !!x.obs, marca: s.mark, cor: s.cor, corTexto: x.status === "pendente" ? "#96907F" : "#35332B" };
+        })
+      }));
+      v.salvarDraft = () => {
+        let pessoas = st.pessoas;
+        let pe = pessoas.find((x) => x.nome.toLowerCase() === (d.participante || "").toLowerCase());
+        if (!pe) {
+          pe = { id: this.novoId("p"), nome: d.participante || "Sem nome", funcao: "", telefone: "", email: "", entrada: this.hoje(), notas: [] };
+          pessoas = pessoas.concat([pe]);
+        }
+        const nova = {
+          id: this.novoId("m"), token: this.novoId("tk"), pessoaId: pe.id, titulo: d.titulo || "Missão", data: d.data || this.hoje(),
+          nota: d.nota, avaliador: d.avaliador || "", fechada: typeof d.nota === "number",
+          fases: d.fases.map((f) => ({ id: this.novoId("f"), nome: f.nome, prazo: "", passos: f.passos.map((x) => ({ id: this.novoId("s"), texto: x.texto, obs: x.obs, status: x.status })) }))
+        };
+        this.setState({ pessoas: pessoas, missoes: st.missoes.concat([nova]), scan: "vazio", draft: null, rota: { nome: "missao", id: nova.id } });
+        this.aviso("ficha salva no caderno ✓");
+      };
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "Checkout de Missões",
+  "description": "Prancheta de checkout de missões da equipe, acompanhamento de tarefas, pessoas e inventário.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
