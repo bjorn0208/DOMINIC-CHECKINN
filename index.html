@@ -53,10 +53,13 @@
           <span style="flex:0 0 auto;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(246,241,227,.4)">protótipo</span>
         </sc-if>
       </div>
-      <div style="display:flex;gap:4px;padding:3px;border:1px solid rgba(246,241,227,.2);border-radius:20px">
-        <sc-for list="{{ densidades }}" as="d" hint-placeholder-count="2">
-          <button onClick="{{ d.sel }}" style="padding:6px 13px;border:none;border-radius:16px;cursor:pointer;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;background:{{ d.bg }};color:{{ d.cor }}">{{ d.label }}</button>
-        </sc-for>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onClick="{{ limparDados }}" style="padding:4px 10px;border:1px solid rgba(188,42,34,.4);border-radius:14px;background:rgba(188,42,34,.15);color:#E53E3E;cursor:pointer;font-family:Kalam,cursive;font-size:12px">limpar dados</button>
+        <div style="display:flex;gap:4px;padding:3px;border:1px solid rgba(246,241,227,.2);border-radius:20px">
+          <sc-for list="{{ densidades }}" as="d" hint-placeholder-count="2">
+            <button onClick="{{ d.sel }}" style="padding:6px 13px;border:none;border-radius:16px;cursor:pointer;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;background:{{ d.bg }};color:{{ d.cor }}">{{ d.label }}</button>
+          </sc-for>
+        </div>
       </div>
     </div>
 
@@ -125,10 +128,11 @@
               <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
               <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">nova ficha</div>
               <div style="margin-top:10px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">para quem</div>
-              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:6px">
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:6px;align-items:center">
                 <sc-for list="{{ chips }}" as="c" hint-placeholder-count="6">
                   <button onClick="{{ c.sel }}" style="padding:5px 13px;min-height:34px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;cursor:pointer;font-family:Kalam,cursive;font-size:15px;background:{{ c.bg }};color:{{ c.cor }}">{{ c.nome }}</button>
                 </sc-for>
+                <button onClick="{{ abrirNovaPessoa }}" style="padding:5px 12px;min-height:34px;border:1.5px dashed #1F3C88;border-radius:14px 9px 15px 8px;cursor:pointer;font-family:Kalam,cursive;font-size:14px;background:transparent;color:#1F3C88">+ nova pessoa</button>
               </div>
               <div style="display:flex;flex-wrap:wrap;gap:18px;margin-top:16px">
                 <div style="flex:1 1 240px">
@@ -413,15 +417,29 @@
         <div data-screen-label="Pessoas">
           <div style="position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
             <div style="position:absolute;top:0;bottom:0;left:34px;width:1px;background:#DDA0A0"></div>
-            <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">caderno de pessoas</div>
-            <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:38px;line-height:1;color:#35332B">Participantes</h1>
-            <div style="margin-top:4px;font-family:Kalam,cursive;font-size:16px;color:#5c574a">nota média por pessoa, missão por missão.</div>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <div>
+                <div style="font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:#96907F">caderno de pessoas</div>
+                <h1 style="margin:2px 0 0;font-family:Caveat,cursive;font-weight:700;font-size:38px;line-height:1;color:#35332B">Participantes</h1>
+                <div style="margin-top:4px;font-family:Kalam,cursive;font-size:16px;color:#5c574a">nota média por pessoa, missão por missão.</div>
+              </div>
+              <button onClick="{{ abrirNovaPessoa }}" style="padding:8px 16px;min-height:40px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">+ nova pessoa</button>
+            </div>
           </div>
+
+          <sc-if value="{{ semPessoas }}">
+            <div style="margin-top:14px;position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 22px rgba(0,0,0,.3);padding:32px 24px;text-align:center">
+              <div style="font-size:32px">👥</div>
+              <div style="font-family:Caveat,cursive;font-size:26px;font-weight:700;color:#35332B;margin-top:6px">Nenhuma pessoa cadastrada</div>
+              <div style="font-family:Kalam,cursive;font-size:15px;color:#96907F;margin-top:4px">Adicione participantes para abrir missões e registrar notas.</div>
+              <button onClick="{{ abrirNovaPessoa }}" style="margin-top:16px;padding:9px 20px;min-height:42px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">+ cadastrar primeira pessoa</button>
+            </div>
+          </sc-if>
 
           <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:14px">
             <sc-for list="{{ pessoas }}" as="p" hint-placeholder-count="6">
-              <button onClick="{{ p.abrir }}" style="flex:1 1 300px;min-width:0;text-align:left;border:none;padding:0;background:transparent;cursor:pointer">
-                <div style="display:flex;align-items:center;gap:14px;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 22px rgba(0,0,0,.3);padding:16px 18px">
+              <div style="flex:1 1 300px;min-width:0;display:flex;align-items:center;border-radius:3px;background:#F6F1E3;box-shadow:0 10px 22px rgba(0,0,0,.3);padding:14px 16px;gap:10px">
+                <button onClick="{{ p.abrir }}" style="flex:1;min-width:0;display:flex;align-items:center;gap:14px;text-align:left;border:none;padding:0;background:transparent;cursor:pointer">
                   <span style="flex:0 0 48px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:2px solid #35332B;border-radius:50% 46% 52% 48%;font-family:Caveat,cursive;font-size:20px;font-weight:700;color:#35332B">{{ p.iniciais }}</span>
                   <div style="flex:1;min-width:0">
                     <div style="font-family:Caveat,cursive;font-size:25px;font-weight:700;line-height:1.1;color:#35332B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.nome }}</div>
@@ -429,8 +447,9 @@
                     <div style="margin-top:2px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ p.meta }}</div>
                   </div>
                   <span style="font-family:Caveat,cursive;font-size:27px;font-weight:700;color:{{ p.corMedia }}">{{ p.mediaTexto }}</span>
-                </div>
-              </button>
+                </button>
+                <button onClick="{{ p.excluir }}" title="Excluir pessoa" style="border:none;background:rgba(188,42,34,.1);color:#BC2A22;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto">✕</button>
+              </div>
             </sc-for>
           </div>
         </div>
@@ -438,7 +457,10 @@
 
       <sc-if value="{{ telaPessoa }}">
         <div data-screen-label="Pessoa">
-          <button onClick="{{ irPessoas }}" style="margin-bottom:10px;padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← pessoas</button>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <button onClick="{{ irPessoas }}" style="padding:6px 0;border:none;background:transparent;cursor:pointer;font-family:Kalam,cursive;font-size:16px;color:rgba(246,241,227,.65)">← pessoas</button>
+            <button onClick="{{ excluirPessoaAtual }}" style="border:1px solid rgba(229,62,62,.4);border-radius:8px;background:rgba(229,62,62,.15);color:#FC8181;padding:5px 12px;font-family:Kalam,cursive;font-size:14px;cursor:pointer">excluir pessoa ✕</button>
+          </div>
 
           <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">
             <div style="flex:1 1 330px;min-width:0;position:relative;overflow:hidden;border-radius:3px;background:#F6F1E3;box-shadow:0 12px 28px rgba(0,0,0,.34);padding:22px 22px 20px 46px">
@@ -514,16 +536,30 @@
             <div style="border-radius:9px;padding:30px 12px 12px;background:linear-gradient(160deg,#6E5334 0%,#4A3722 100%);box-shadow:0 18px 40px rgba(0,0,0,.45)">
               <div style="position:relative;overflow:hidden;border-radius:2px;background:repeating-linear-gradient(to bottom,transparent 0 31px,#CBD8E9 31px 32px),#F6F1E3;padding:24px 22px 24px 48px">
                 <div style="position:absolute;top:0;bottom:0;left:36px;width:1px;background:#DDA0A0"></div>
-                <h1 style="margin:0;font-family:Caveat,cursive;font-weight:700;font-size:34px;line-height:1;color:#35332B">Inventário</h1>
-                <div style="font-family:Kalam,cursive;font-size:16px;color:{{ corFaltando }}">{{ textoFaltando }}</div>
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+                  <div>
+                    <h1 style="margin:0;font-family:Caveat,cursive;font-weight:700;font-size:34px;line-height:1;color:#35332B">Inventário</h1>
+                    <div style="font-family:Kalam,cursive;font-size:16px;color:{{ corFaltando }}">{{ textoFaltando }}</div>
+                  </div>
+                  <button onClick="{{ abrirNovoItem }}" style="padding:8px 16px;min-height:40px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">+ novo item</button>
+                </div>
                 <input class="cn" value="{{ busca }}" onChange="{{ setBusca }}" placeholder="procurar item ou lugar" style="width:100%;margin-top:14px;padding:3px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.3);outline:none;font-family:Kalam,cursive;font-size:17px;color:#1F3C88" />
+
+                <sc-if value="{{ semItens }}">
+                  <div style="margin-top:24px;padding:28px 16px;text-align:center;border:1.5px dashed rgba(53,51,43,.25);border-radius:6px">
+                    <div style="font-size:30px">📦</div>
+                    <div style="font-family:Caveat,cursive;font-size:26px;font-weight:700;color:#35332B;margin-top:6px">Nenhum item cadastrado no inventário</div>
+                    <div style="font-family:Kalam,cursive;font-size:15px;color:#96907F;margin-top:4px">Cadastre os equipamentos, ferramentas ou suprimentos com nome, quantidade e local.</div>
+                    <button onClick="{{ abrirNovoItem }}" style="margin-top:14px;padding:8px 18px;min-height:40px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">+ adicionar primeiro item</button>
+                  </div>
+                </sc-if>
 
                 <div style="display:flex;flex-wrap:wrap;gap:22px;margin-top:20px;align-items:flex-start">
                   <sc-for list="{{ grupos }}" as="g" hint-placeholder-count="4">
                     <div style="flex:1 1 300px;min-width:0">
                       <div style="font-family:Caveat,cursive;font-size:22px;font-weight:700;color:#35332B;border-bottom:1.5px solid #DDA0A0;padding-bottom:2px">{{ g.local }}</div>
                       <sc-for list="{{ g.itens }}" as="i" hint-placeholder-count="3">
-                        <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px dotted rgba(0,0,0,.12)">
+                        <div style="display:flex;align-items:flex-start;gap:8px;padding:9px 0;border-bottom:1px dotted rgba(0,0,0,.12)">
                           <div style="flex:1;min-width:0">
                             <div style="font-family:Kalam,cursive;font-size:17px;font-weight:700;color:{{ i.cor }}">{{ i.nome }}</div>
                             <div style="font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#96907F">{{ i.label }} · mín. {{ i.minimo }}</div>
@@ -532,6 +568,7 @@
                             <button onClick="{{ i.menos }}" style="width:32px;height:32px;border:1px solid rgba(0,0,0,.15);border-radius:8px 6px 9px 5px;background:transparent;cursor:pointer;font-family:Caveat,cursive;font-size:20px;color:#35332B">−</button>
                             <span style="min-width:34px;text-align:center;font-family:Caveat,cursive;font-size:26px;font-weight:700;color:{{ i.cor }}">{{ i.qtd }}</span>
                             <button onClick="{{ i.mais }}" style="width:32px;height:32px;border:1px solid rgba(0,0,0,.15);border-radius:8px 6px 9px 5px;background:transparent;cursor:pointer;font-family:Caveat,cursive;font-size:20px;color:#35332B">+</button>
+                            <button onClick="{{ i.excluir }}" title="Excluir item" style="border:none;background:transparent;color:#96907F;cursor:pointer;font-size:13px;padding:4px 6px">✕</button>
                           </div>
                         </div>
                       </sc-for>
@@ -686,6 +723,76 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ modalNovaPessoa }}">
+    <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,10,.72)">
+      <div style="width:100%;max-width:420px;max-height:88vh;overflow:auto;border-radius:3px;background:#F6F1E3;box-shadow:0 24px 60px rgba(0,0,0,.5);padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+          <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;color:#35332B">Nova pessoa</div>
+          <button onClick="{{ fecharModal }}" style="border:none;background:transparent;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;padding:6px">fechar ✕</button>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">nome completo *</div>
+            <input class="cn" value="{{ novaPessoaNome }}" onChange="{{ setNovaPessoaNome }}" placeholder="Ex: João da Silva" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">função / área</div>
+            <input class="cn" value="{{ novaPessoaFuncao }}" onChange="{{ setNovaPessoaFuncao }}" placeholder="Ex: Captação e conteúdo" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="flex:1">
+              <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">telefone</div>
+              <input class="cn" value="{{ novaPessoaTelefone }}" onChange="{{ setNovaPessoaTelefone }}" placeholder="(11) 90000-0000" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+            </div>
+            <div style="flex:1">
+              <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">e-mail</div>
+              <input class="cn" value="{{ novaPessoaEmail }}" onChange="{{ setNovaPessoaEmail }}" placeholder="nome@babel.com.br" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button onClick="{{ salvarNovaPessoa }}" style="flex:1;padding:11px;min-height:44px;border:1.5px solid #157A45;border-radius:15px 10px 17px 9px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">salvar pessoa</button>
+          <button onClick="{{ fecharModal }}" style="padding:11px 16px;min-height:44px;border:1.5px solid #35332B;border-radius:15px 10px 17px 9px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;cursor:pointer">cancelar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ modalNovoItem }}">
+    <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,10,.72)">
+      <div style="width:100%;max-width:420px;max-height:88vh;overflow:auto;border-radius:3px;background:#F6F1E3;box-shadow:0 24px 60px rgba(0,0,0,.5);padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+          <div style="font-family:Caveat,cursive;font-size:30px;font-weight:700;color:#35332B">Novo item de inventário</div>
+          <button onClick="{{ fecharModal }}" style="border:none;background:transparent;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;padding:6px">fechar ✕</button>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-direction:column;gap:12px">
+          <div>
+            <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">nome do item *</div>
+            <input class="cn" value="{{ novoItemNome }}" onChange="{{ setNovoItemNome }}" placeholder="Ex: Microfone de Lapela" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:18px;color:#1F3C88" />
+          </div>
+          <div>
+            <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">aonde está (local / sala / mochila)</div>
+            <input class="cn" value="{{ novoItemLocal }}" onChange="{{ setNovoItemLocal }}" placeholder="Ex: Estúdio, Mochila 1, Almoxarifado" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+          </div>
+          <div style="display:flex;gap:12px">
+            <div style="flex:1">
+              <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">quantidade atual</div>
+              <input class="cn" type="number" min="0" value="{{ novoItemQtd }}" onChange="{{ setNovoItemQtd }}" placeholder="1" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+            </div>
+            <div style="flex:1">
+              <div style="font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#96907F">mínimo esperado</div>
+              <input class="cn" type="number" min="0" value="{{ novoItemMinimo }}" onChange="{{ setNovoItemMinimo }}" placeholder="1" style="width:100%;padding:4px 0;background:transparent;border:none;border-bottom:1px dotted rgba(31,60,136,.35);outline:none;font-family:Kalam,cursive;font-size:16px;color:#1F3C88" />
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button onClick="{{ salvarNovoItem }}" style="flex:1;padding:11px;min-height:44px;border:1.5px solid #157A45;border-radius:15px 10px 17px 9px;background:#157A45;color:#F6F1E3;font-family:Kalam,cursive;font-size:16px;font-weight:700;cursor:pointer">adicionar item</button>
+          <button onClick="{{ fecharModal }}" style="padding:11px 16px;min-height:44px;border:1.5px solid #35332B;border-radius:15px 10px 17px 9px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;cursor:pointer">cancelar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ temToast }}">
     <div style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);z-index:70;padding:9px 18px;border-radius:20px;background:#F6F1E3;box-shadow:0 10px 30px rgba(0,0,0,.45);font-family:Kalam,cursive;font-size:16px;color:#24211C;animation:sobe .18s ease-out">{{ toast }}</div>
   </sc-if>
@@ -710,7 +817,9 @@ class Component extends DCLogic {
       dens: p.densidadeInicial === "desktop" ? "desktop" : "celular",
       filtro: "abertas", busca: "", novaNota: "", modal: null, copiado: false,
       scan: "vazio", draft: null, toast: "",
-      novo: { pessoaId: "", titulo: "", data: this.hoje() }
+      novo: { pessoaId: "", titulo: "", data: this.hoje() },
+      novaPessoa: { nome: "", funcao: "", telefone: "", email: "" },
+      novoItem: { nome: "", local: "", qtd: 1, minimo: 1 }
     };
   }
 
@@ -983,113 +1092,102 @@ class Component extends DCLogic {
     this.persistirDados(this.state.missoes, novas, this.state.inventario);
   }
 
+  excluirPessoa(peId) {
+    const pe = this.state.pessoas.find((x) => x.id === peId);
+    const nome = pe ? pe.nome : "Pessoa";
+    const novasPessoas = this.state.pessoas.filter((x) => x.id !== peId);
+    const novasMissoes = this.state.missoes.filter((m) => m.pessoaId !== peId);
+    const estadoPatch = {
+      pessoas: novasPessoas,
+      missoes: novasMissoes
+    };
+    if (this.state.rota.id === peId || this.state.rota.nome === "pessoa") {
+      estadoPatch.rota = { nome: "pessoas", id: null };
+    }
+    this.setState(estadoPatch);
+    this.persistirDados(novasMissoes, novasPessoas, this.state.inventario);
+    this.aviso(nome + " removido(a) do caderno ✓");
+  }
+
+  salvarNovaPessoa() {
+    const p = this.state.novaPessoa;
+    if (!p || !p.nome.trim()) {
+      this.aviso("Digite o nome da pessoa");
+      return;
+    }
+    const nova = {
+      id: this.novoId("p"),
+      nome: p.nome.trim(),
+      funcao: (p.funcao || "").trim(),
+      telefone: (p.telefone || "").trim(),
+      email: (p.email || "").trim(),
+      entrada: this.hoje(),
+      notas: []
+    };
+    const novasPessoas = this.state.pessoas.concat([nova]);
+    this.setState({
+      pessoas: novasPessoas,
+      modal: null,
+      novaPessoa: { nome: "", funcao: "", telefone: "", email: "" }
+    });
+    this.persistirDados(this.state.missoes, novasPessoas, this.state.inventario);
+    this.aviso(nova.nome + " adicionado(a) com sucesso ✓");
+  }
+
+  salvarNovoItem() {
+    const it = this.state.novoItem;
+    if (!it || !it.nome.trim()) {
+      this.aviso("Digite o nome do item");
+      return;
+    }
+    const local = (it.local || "").trim() || "Geral";
+    const qtd = isNaN(parseInt(it.qtd, 10)) ? 1 : Math.max(0, parseInt(it.qtd, 10));
+    const minimo = isNaN(parseInt(it.minimo, 10)) ? 1 : Math.max(0, parseInt(it.minimo, 10));
+    const novo = {
+      id: this.novoId("i"),
+      nome: it.nome.trim(),
+      local: local,
+      qtd: qtd,
+      minimo: minimo
+    };
+    const novosItens = this.state.inventario.concat([novo]);
+    this.setState({
+      inventario: novosItens,
+      modal: null,
+      novoItem: { nome: "", local: "", qtd: 1, minimo: 1 }
+    });
+    this.persistirDados(this.state.missoes, this.state.pessoas, novosItens);
+    this.aviso(novo.nome + " adicionado ao inventário ✓");
+  }
+
+  excluirItem(itemId) {
+    const it = this.state.inventario.find((x) => x.id === itemId);
+    const nome = it ? it.nome : "Item";
+    const novosItens = this.state.inventario.filter((x) => x.id !== itemId);
+    this.setState({ inventario: novosItens });
+    this.persistirDados(this.state.missoes, this.state.pessoas, novosItens);
+    this.aviso(nome + " removido do inventário ✓");
+  }
+
+  limparDados() {
+    const v = this.seed();
+    this.setState({
+      pessoas: v.pessoas,
+      missoes: v.missoes,
+      inventario: v.inventario,
+      rota: { nome: "missoes", id: null },
+      modal: null
+    });
+    this.persistirDados(v.missoes, v.pessoas, v.inventario);
+    this.aviso("Todos os dados foram resetados ✓");
+  }
+
   /* ---------- dados ---------- */
   seed() {
-    let n = 0;
-    const id = (p) => p + ++n;
-    const P = (texto, status, obs) => ({ id: id("s"), texto: texto, obs: obs || "", status: status || "pendente" });
-    const F = (nome, prazo, passos) => ({ id: id("f"), nome: nome, prazo: prazo, passos: passos });
-    const pes = (nome, funcao, telefone, email, entrada, notas) => ({
-      id: id("p"), nome: nome, funcao: funcao, telefone: telefone, email: email, entrada: entrada,
-      notas: (notas || []).map((x) => ({ id: id("n"), data: x[0], texto: x[1] }))
-    });
-    const pedro = pes("Pedro Henrique", "Captação e conteúdo", "(11) 94422-1180", "pedro@babel.com.br", "04/08/2026", [
-      ["19/08/2026", "melhorou muito na comunicação com o time — ainda trava em tarefa que depende de terceiro"],
-      ["15/08/2026", "chegou 20 min atrasado nas gravações de quinta"]
-    ]);
-    const larissa = pes("Larissa Prado", "Social e tráfego", "(11) 98871-3320", "larissa@babel.com.br", "12/05/2026", [
-      ["18/08/2026", "puxa a fila sozinha. dar mais autonomia de verba"]
-    ]);
-    const caio = pes("Caio Mendes", "Estúdio e equipamento", "(11) 99120-4477", "caio@babel.com.br", "02/06/2026", []);
-    const bruna = pes("Bruna Tavares", "Roteiro e edição", "(11) 97744-0912", "bruna@babel.com.br", "20/06/2026", [
-      ["17/08/2026", "entrega bem escrito, mas sempre no limite do prazo"]
-    ]);
-    const rafael = pes("Rafael Duarte", "SDR", "(11) 96650-2231", "rafael@babel.com.br", "28/07/2026", [
-      ["19/08/2026", "trava na hora de ligar. treinar abordagem por telefone antes da próxima missão"]
-    ]);
-    const yasmin = pes("Yasmin Costa", "Operação e onboarding", "(11) 98003-7745", "yasmin@babel.com.br", "01/08/2026", []);
-    const missao = (pe, titulo, data, fases, nota, avaliador) => ({
-      id: id("m"), token: id("tk") + "a7f3c9d1", pessoaId: pe.id, titulo: titulo, data: data,
-      nota: typeof nota === "number" ? nota : null, avaliador: avaliador || "", fechada: typeof nota === "number", fases: fases
-    });
-    const missoes = [
-      missao(pedro, "Missão Pedro Henrique", "18/08/2026", [
-        F("Fase 1", "19h", [
-          P("Falar com Marcos para ver acesso aos e-mails profissionais", "ok"),
-          P("Com os e-mails, criar as contas do TikTok e do Kawai", "falhou", "não conseguiu"),
-          P("Coordenar gravações com os meninos", "ok", "sem atrapalhar o desenvolvimento deles"),
-          P("Pesquisar a palavra COORDENAR (agora → organizar)")
-        ]),
-        F("Fase 2 · Captação estratégica", "até o fim", [
-          P("P1 · Documentário: contar a história, documentar o que está acontecendo", "parcial", "conseguiu em partes!"),
-          P("P2 · Vídeos virais: curtos, engraçados, conexão", "pendente", "ainda não deu tempo!")
-        ]),
-        F("Fase 3 · Entrega", "", [P("Seguir as orientações do guia que foi entregue", "falhou", "não conseguiu!")])
-      ], 6, "Adrian S."),
-      missao(pedro, "Captação — semana 2", "19/08/2026", [
-        F("Fase 1 · Preparação", "14h", [
-          P("Separar equipamento pela lista do inventário", "ok"),
-          P("Confirmar horário com os meninos", "ok"),
-          P("Testar áudio da lapela antes de sair")
-        ]),
-        F("Fase 2 · Gravação", "até sexta", [
-          P("Gravar 3 blocos do documentário", "parcial", "só deu 1 bloco"),
-          P("Registrar os bastidores")
-        ])
-      ]),
-      missao(larissa, "Funil do Instagram", "12/08/2026", [
-        F("Fase 1 · Estrutura", "3 dias", [P("Mapear as 5 dores principais", "ok"), P("Escrever 10 ganchos de abertura", "ok")]),
-        F("Fase 2 · Publicação", "até domingo", [
-          P("Postar 5 reels na semana", "ok"),
-          P("Responder todos os comentários em 24h", "parcial", "faltou o fim de semana")
-        ])
-      ], 9, "Adrian S."),
-      missao(larissa, "Campanha de agosto", "19/08/2026", [
-        F("Fase 1 · Preparação", "segunda", [P("Escolher os 3 criativos", "ok"), P("Fechar a verba com o financeiro"), P("Subir os públicos")])
-      ]),
-      missao(caio, "Montagem do estúdio", "14/08/2026", [
-        F("Fase 1 · Sala", "2 dias", [
-          P("Instalar a iluminação de fundo", "ok"),
-          P("Tratar o eco com espuma", "ok"),
-          P("Organizar os cabos por cor", "parcial", "faltou o rack")
-        ]),
-        F("Fase 2 · Entrega", "", [P("Fotografar o setup pronto e mandar no grupo", "ok")])
-      ], 8.5, "Adrian S."),
-      missao(bruna, "Roteiro do documentário", "16/08/2026", [
-        F("Fase 1 · Pesquisa", "1 semana", [
-          P("Entrevistar 3 pessoas do time", "ok"),
-          P("Levantar arquivo de imagens antigas", "ok"),
-          P("Montar a linha do tempo", "parcial", "metade")
-        ]),
-        F("Fase 2 · Escrita", "até o fim do mês", [P("Escrever o ato 1"), P("Revisar com a direção")])
-      ]),
-      missao(rafael, "Prospecção fria — 50 contatos", "18/08/2026", [
-        F("Fase 1 · Lista", "18h", [
-          P("Levantar 50 contatos qualificados", "parcial", "chegou a 28"),
-          P("Validar os telefones antes de ligar", "falhou", "não conseguiu")
-        ]),
-        F("Fase 2 · Abordagem", "até quinta", [
-          P("Ligar para os 50 da lista", "falhou", "ligou para 12"),
-          P("Registrar cada retorno na ficha", "ok")
-        ])
-      ], 4.5, "Adrian S."),
-      missao(yasmin, "Onboarding dos novos", "19/08/2026", [
-        F("Fase 1 · Material", "quarta", [P("Imprimir as fichas de missão", "ok"), P("Preparar as pranchetas"), P("Separar os crachás")]),
-        F("Fase 2 · Primeiro dia", "segunda", [P("Apresentar o método"), P("Rodar a primeira missão com cada um")])
-      ])
-    ];
-    const it = (nome, local, qtd, minimo) => ({ id: id("i"), nome: nome, local: local, qtd: qtd, minimo: minimo });
     return {
-      pessoas: [pedro, larissa, caio, bruna, rafael, yasmin],
-      missoes: missoes,
-      inventario: [
-        it("Cabo HDMI 3m", "Estúdio", 0, 1), it("Softbox 60cm", "Estúdio", 2, 2), it("Tripé de chão", "Estúdio", 3, 1),
-        it("Cartão SD 128GB", "Mochila de gravação", 2, 2), it("Bateria extra da câmera", "Mochila de gravação", 4, 2),
-        it("Microfone de lapela", "Mochila de gravação", 1, 2), it("Pilha AA", "Gaveta da sala", 12, 6),
-        it("Adaptador USB-C", "Gaveta da sala", 0, 2), it("Fone de monitoração", "Gaveta da sala", 2, 1),
-        it("Papel A4", "Almoxarifado", 5, 2), it("Cartucho de tinta preta", "Almoxarifado", 1, 2),
-        it("Prancheta", "Almoxarifado", 14, 4), it("Crachá de visitante", "Recepção", 25, 10)
-      ]
+      pessoas: [],
+      missoes: [],
+      inventario: []
     };
   }
 
@@ -1185,7 +1283,12 @@ class Component extends DCLogic {
       bg: st.novo.pessoaId === pe.id ? "#1F3C88" : "transparent", cor: st.novo.pessoaId === pe.id ? "#F6F1E3" : "#1F3C88"
     }));
     v.criar = () => {
-      const pid = st.novo.pessoaId || st.pessoas[0].id;
+      if (!st.pessoas.length) {
+        this.setState({ modal: "novaPessoa" });
+        this.aviso("Cadastre um participante primeiro");
+        return;
+      }
+      const pid = st.novo.pessoaId || (st.pessoas[0] && st.pessoas[0].id);
       const nova = {
         id: this.novoId("m"), token: this.novoId("tk"), pessoaId: pid, titulo: st.novo.titulo || "Missão",
         data: st.novo.data, nota: null, avaliador: "", fechada: false,
@@ -1289,19 +1392,39 @@ class Component extends DCLogic {
     v.fecharModal = () => this.setState({ modal: null });
 
     /* pessoas */
+    v.semPessoas = !st.pessoas.length;
+    v.abrirNovaPessoa = () => this.setState({ modal: "novaPessoa", novaPessoa: { nome: "", funcao: "", telefone: "", email: "" } });
+    v.modalNovaPessoa = st.modal === "novaPessoa";
+    v.novaPessoaNome = (st.novaPessoa && st.novaPessoa.nome) || "";
+    v.setNovaPessoaNome = (e) => this.setState({ novaPessoa: Object.assign({}, st.novaPessoa, { nome: e.target.value }) });
+    v.novaPessoaFuncao = (st.novaPessoa && st.novaPessoa.funcao) || "";
+    v.setNovaPessoaFuncao = (e) => this.setState({ novaPessoa: Object.assign({}, st.novaPessoa, { funcao: e.target.value }) });
+    v.novaPessoaTelefone = (st.novaPessoa && st.novaPessoa.telefone) || "";
+    v.setNovaPessoaTelefone = (e) => this.setState({ novaPessoa: Object.assign({}, st.novaPessoa, { telefone: e.target.value }) });
+    v.novaPessoaEmail = (st.novaPessoa && st.novaPessoa.email) || "";
+    v.setNovaPessoaEmail = (e) => this.setState({ novaPessoa: Object.assign({}, st.novaPessoa, { email: e.target.value }) });
+    v.salvarNovaPessoa = () => this.salvarNovaPessoa();
+    v.limparDados = () => this.limparDados();
+
     v.pessoas = st.pessoas.map((pe) => {
       const r = this.resumo(pe);
       return {
+        id: pe.id,
         nome: pe.nome, funcao: pe.funcao || "", iniciais: this.iniciais(pe.nome),
         meta: r.total + " missões · " + r.abertas + " abertas",
         mediaTexto: r.media === null ? "—" : r.media.toFixed(1), corMedia: this.cNota(r.media),
-        abrir: () => this.ir("pessoa", pe.id)
+        abrir: () => this.ir("pessoa", pe.id),
+        excluir: (e) => {
+          if (e && e.stopPropagation) e.stopPropagation();
+          this.excluirPessoa(pe.id);
+        }
       };
     });
     const pa = st.pessoas.find((x) => x.id === st.rota.id);
     if (pa) {
       const r = this.resumo(pa);
       v.pNome = pa.nome; v.pFuncao = pa.funcao || ""; v.pTelefone = pa.telefone || ""; v.pEmail = pa.email || "";
+      v.excluirPessoaAtual = () => this.excluirPessoa(pa.id);
       v.setFuncao = (e) => this.salvaP(Object.assign({}, pa, { funcao: e.target.value }));
       v.setTelefone = (e) => this.salvaP(Object.assign({}, pa, { telefone: e.target.value }));
       v.setEmail = (e) => this.salvaP(Object.assign({}, pa, { email: e.target.value }));
@@ -1326,6 +1449,19 @@ class Component extends DCLogic {
     }
 
     /* inventário */
+    v.semItens = !st.inventario.length;
+    v.abrirNovoItem = () => this.setState({ modal: "novoItem", novoItem: { nome: "", local: "", qtd: 1, minimo: 1 } });
+    v.modalNovoItem = st.modal === "novoItem";
+    v.novoItemNome = (st.novoItem && st.novoItem.nome) || "";
+    v.setNovoItemNome = (e) => this.setState({ novoItem: Object.assign({}, st.novoItem, { nome: e.target.value }) });
+    v.novoItemLocal = (st.novoItem && st.novoItem.local) || "";
+    v.setNovoItemLocal = (e) => this.setState({ novoItem: Object.assign({}, st.novoItem, { local: e.target.value }) });
+    v.novoItemQtd = (st.novoItem && typeof st.novoItem.qtd !== "undefined") ? String(st.novoItem.qtd) : "1";
+    v.setNovoItemQtd = (e) => this.setState({ novoItem: Object.assign({}, st.novoItem, { qtd: e.target.value }) });
+    v.novoItemMinimo = (st.novoItem && typeof st.novoItem.minimo !== "undefined") ? String(st.novoItem.minimo) : "1";
+    v.setNovoItemMinimo = (e) => this.setState({ novoItem: Object.assign({}, st.novoItem, { minimo: e.target.value }) });
+    v.salvarNovoItem = () => this.salvarNovoItem();
+
     const sit = (i) => (i.qtd <= 0 ? { label: "acabou", cor: "#BC2A22", falta: true } : i.qtd <= (i.minimo || 0) ? { label: "acabando", cor: "#A9670A", falta: true } : { label: "em estoque", cor: "#157A45", falta: false });
     const filtrados = st.inventario.filter((i) => (i.nome + " " + (i.local || "")).toLowerCase().indexOf(st.busca.toLowerCase()) >= 0);
     const locais = [];
@@ -1341,7 +1477,18 @@ class Component extends DCLogic {
       local: l,
       itens: filtrados.filter((i) => (i.local || "sem lugar definido") === l).map((i) => {
         const s = sit(i);
-        return { nome: i.nome, qtd: i.qtd, minimo: i.minimo, label: s.label, cor: s.cor, mais: () => mudaItem(i, { qtd: i.qtd + 1 }), menos: () => mudaItem(i, { qtd: Math.max(0, i.qtd - 1) }) };
+        return {
+          id: i.id,
+          nome: i.nome,
+          local: i.local || "sem lugar definido",
+          qtd: i.qtd,
+          minimo: i.minimo,
+          label: s.label,
+          cor: s.cor,
+          mais: () => mudaItem(i, { qtd: i.qtd + 1 }),
+          menos: () => mudaItem(i, { qtd: Math.max(0, i.qtd - 1) }),
+          excluir: () => this.excluirItem(i.id)
+        };
       })
     }));
     const faltando = st.inventario.filter((i) => sit(i).falta).length;
