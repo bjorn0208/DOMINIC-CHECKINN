@@ -54,6 +54,10 @@
         </sc-if>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
+        <button onClick="{{ abrirModalSupabase }}" style="padding:4px 10px;border:1px solid {{ corBordaNuvem }};border-radius:14px;background:{{ bgNuvem }};color:{{ corTextoNuvem }};cursor:pointer;font-family:Kalam,cursive;font-size:12px;display:flex;align-items:center;gap:4px" title="Status da sincronização com Supabase">
+          <span>{{ iconeNuvem }}</span>
+          <span>{{ labelNuvem }}</span>
+        </button>
         <button onClick="{{ limparDados }}" style="padding:4px 10px;border:1px solid rgba(188,42,34,.4);border-radius:14px;background:rgba(188,42,34,.15);color:#E53E3E;cursor:pointer;font-family:Kalam,cursive;font-size:12px">limpar dados</button>
         <div style="display:flex;gap:4px;padding:3px;border:1px solid rgba(246,241,227,.2);border-radius:20px">
           <sc-for list="{{ densidades }}" as="d" hint-placeholder-count="2">
@@ -793,6 +797,35 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ modalSupabase }}">
+    <div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(20,16,10,.72)">
+      <div style="width:100%;max-width:460px;max-height:88vh;overflow:auto;border-radius:3px;background:#F6F1E3;box-shadow:0 24px 60px rgba(0,0,0,.5);padding:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+          <div style="font-family:Caveat,cursive;font-size:28px;font-weight:700;color:#35332B">Sincronização Supabase</div>
+          <button onClick="{{ fecharModal }}" style="border:none;background:transparent;cursor:pointer;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#96907F;padding:6px">fechar ✕</button>
+        </div>
+        <div style="margin-top:14px;font-family:Kalam,cursive;font-size:15px;color:#35332B">
+          <div style="padding:10px 14px;border-radius:6px;background:{{ bgStatusModal }};border:1px solid {{ bordaStatusModal }};color:{{ corStatusModal }};font-size:14px">
+            {{ mensagemSupabase }}
+          </div>
+          <sc-if value="{{ temSqlHelp }}">
+            <div style="margin-top:12px;padding:10px;background:#2D2B24;color:#F6F1E3;border-radius:4px;font-family:monospace;font-size:11.5px;word-break:break-all;user-select:all">
+              {{ sqlHelp }}
+            </div>
+            <div style="margin-top:6px;font-size:12px;color:#96907F">Execute o comando acima no SQL Editor do seu Supabase para ativar a tabela de persistência.</div>
+          </sc-if>
+          <div style="margin-top:12px;font-size:13px;color:#787163">
+            Última sincronização: <strong>{{ ultimaSincronizacao }}</strong>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button onClick="{{ forcarSincronizacao }}" style="flex:1;padding:10px;min-height:42px;border:1.5px solid #1F3C88;border-radius:14px 9px 15px 8px;background:#1F3C88;color:#F6F1E3;font-family:Kalam,cursive;font-size:15px;font-weight:700;cursor:pointer">sincronizar agora ☁️</button>
+          <button onClick="{{ fecharModal }}" style="padding:10px 16px;min-height:42px;border:1.5px solid #35332B;border-radius:14px 9px 15px 8px;background:transparent;color:#35332B;font-family:Kalam,cursive;font-size:15px;cursor:pointer">fechar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <sc-if value="{{ temToast }}">
     <div style="position:fixed;left:50%;bottom:78px;transform:translateX(-50%);z-index:70;padding:9px 18px;border-radius:20px;background:#F6F1E3;box-shadow:0 10px 30px rgba(0,0,0,.45);font-family:Kalam,cursive;font-size:16px;color:#24211C;animation:sobe .18s ease-out">{{ toast }}</div>
   </sc-if>
@@ -819,7 +852,8 @@ class Component extends DCLogic {
       scan: "vazio", draft: null, toast: "",
       novo: { pessoaId: "", titulo: "", data: this.hoje() },
       novaPessoa: { nome: "", funcao: "", telefone: "", email: "" },
-      novoItem: { nome: "", local: "", qtd: 1, minimo: 1 }
+      novoItem: { nome: "", local: "", qtd: 1, minimo: 1 },
+      cloud: { status: "conectando", configured: false, connected: false, lastSync: null, message: "Verificando conexão com Supabase...", sqlHelp: "" }
     };
   }
 
@@ -837,6 +871,122 @@ class Component extends DCLogic {
         } catch (err) {}
       }
     });
+    this.verificarSupabase(true);
+  }
+
+  /* ---------- sincronização supabase ---------- */
+  async verificarSupabase(carregarSePossivel) {
+    try {
+      const res = await fetch("/api/supabase-status");
+      const json = await res.json();
+      this.setState({
+        cloud: {
+          status: json.connected ? (json.tableExists === false ? "tabela_ausente" : "conectado") : (json.configured ? "erro" : "nao_configurado"),
+          configured: !!json.configured,
+          connected: !!json.connected,
+          tableExists: json.tableExists !== false,
+          lastSync: json.lastSync || this.state.cloud.lastSync,
+          message: json.message || "",
+          sqlHelp: json.sqlHelp || ""
+        }
+      });
+      if (carregarSePossivel && json.configured && json.tableExists !== false) {
+        this.carregarSupabase();
+      }
+    } catch (e) {
+      this.setState({
+        cloud: Object.assign({}, this.state.cloud, {
+          status: "erro",
+          message: "Não foi possível contatar o servidor de sincronização"
+        })
+      });
+    }
+  }
+
+  async carregarSupabase() {
+    try {
+      const res = await fetch("/api/supabase/load");
+      const json = await res.json();
+      if (json.success && json.data) {
+        const d = json.data;
+        const temDadosRemotos = (d.missoes && d.missoes.length) || (d.pessoas && d.pessoas.length) || (d.inventario && d.inventario.length);
+        if (temDadosRemotos) {
+          const missoes = d.missoes || [];
+          const pessoas = d.pessoas || [];
+          const inventario = d.inventario || [];
+          this.setState({
+            missoes: missoes,
+            pessoas: pessoas,
+            inventario: inventario,
+            cloud: Object.assign({}, this.state.cloud, {
+              status: "conectado",
+              lastSync: json.updatedAt || new Date().toISOString(),
+              message: "Dados sincronizados com o Supabase com sucesso"
+            })
+          });
+          try {
+            localStorage.setItem("dominic_checkin_store_v2", JSON.stringify({ missoes, pessoas, inventario }));
+          } catch (err) {}
+        } else {
+          // Se o banco remoto estiver vazio e houver dados locais, envia para a nuvem
+          const temDadosLocais = this.state.missoes.length || this.state.pessoas.length || this.state.inventario.length;
+          if (temDadosLocais) {
+            this.sincronizarSupabase(this.state.missoes, this.state.pessoas, this.state.inventario);
+          }
+        }
+      }
+    } catch (e) {}
+  }
+
+  async sincronizarSupabase(missoes, pessoas, inventario) {
+    clearTimeout(this._syncTimeout);
+    this._syncTimeout = setTimeout(async () => {
+      try {
+        const payload = {
+          missoes: missoes || this.state.missoes,
+          pessoas: pessoas || this.state.pessoas,
+          inventario: inventario || this.state.inventario
+        };
+        this.setState({
+          cloud: Object.assign({}, this.state.cloud, { status: "sincronizando" })
+        });
+        const res = await fetch("/api/supabase/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) {
+          this.setState({
+            cloud: Object.assign({}, this.state.cloud, {
+              status: "conectado",
+              lastSync: json.syncedAt || new Date().toISOString(),
+              message: "Sincronizado com o Supabase ✓"
+            })
+          });
+        } else {
+          this.setState({
+            cloud: Object.assign({}, this.state.cloud, {
+              status: json.tableMissing ? "tabela_ausente" : (this.state.cloud.configured ? "erro" : "nao_configurado"),
+              message: json.message || "Erro na sincronização",
+              sqlHelp: json.sqlHelp || this.state.cloud.sqlHelp
+            })
+          });
+        }
+      } catch (e) {
+        this.setState({
+          cloud: Object.assign({}, this.state.cloud, {
+            status: "erro",
+            message: "Falha de rede ao sincronizar"
+          })
+        });
+      }
+    }, 400);
+  }
+
+  forcarSincronizacao() {
+    this.sincronizarSupabase(this.state.missoes, this.state.pessoas, this.state.inventario);
+    this.aviso("Sincronizando com Supabase...");
   }
 
   detectarRotaInicial(missoes) {
@@ -1068,13 +1218,17 @@ class Component extends DCLogic {
 
   /* ---------- persistência ---------- */
   persistirDados(missoes, pessoas, inventario) {
+    const m = missoes || this.state.missoes;
+    const p = pessoas || this.state.pessoas;
+    const inv = inventario || this.state.inventario;
     try {
       localStorage.setItem("dominic_checkin_store_v2", JSON.stringify({
-        missoes: missoes || this.state.missoes,
-        pessoas: pessoas || this.state.pessoas,
-        inventario: inventario || this.state.inventario
+        missoes: m,
+        pessoas: p,
+        inventario: inv
       }));
     } catch (e) {}
+    this.sincronizarSupabase(m, p, inv);
   }
 
   salvaM(m) {
@@ -1390,6 +1544,28 @@ class Component extends DCLogic {
     v.modalEnviar = st.modal === "enviar";
     v.abrirEnviar = () => this.setState({ modal: "enviar" });
     v.fecharModal = () => this.setState({ modal: null });
+
+    /* supabase cloud */
+    const c = st.cloud || {};
+    v.modalSupabase = st.modal === "supabase";
+    v.abrirModalSupabase = () => {
+      this.setState({ modal: "supabase" });
+      this.verificarSupabase(false);
+    };
+    v.forcarSincronizacao = () => this.forcarSincronizacao();
+    v.iconeNuvem = c.status === "sincronizando" ? "🔄" : c.status === "conectado" ? "☁️" : c.status === "tabela_ausente" ? "⚠️" : c.status === "erro" ? "⚠️" : "☁️";
+    v.labelNuvem = c.status === "sincronizando" ? "sincronizando..." : c.status === "conectado" ? "supabase ativo" : c.status === "tabela_ausente" ? "criar tabela" : c.status === "erro" ? "erro nuvem" : "supabase";
+    v.corBordaNuvem = c.status === "conectado" ? "rgba(21,122,69,.4)" : c.status === "tabela_ausente" ? "rgba(169,103,10,.4)" : "rgba(31,60,136,.3)";
+    v.bgNuvem = c.status === "conectado" ? "rgba(21,122,69,.12)" : c.status === "tabela_ausente" ? "rgba(169,103,10,.12)" : "rgba(31,60,136,.1)";
+    v.corTextoNuvem = c.status === "conectado" ? "#157A45" : c.status === "tabela_ausente" ? "#A9670A" : "#1F3C88";
+    
+    v.mensagemSupabase = c.message || (c.connected ? "Conectado ao Supabase com sucesso" : "Supabase não conectado");
+    v.bgStatusModal = c.status === "conectado" ? "rgba(21,122,69,.08)" : "rgba(169,103,10,.08)";
+    v.bordaStatusModal = c.status === "conectado" ? "rgba(21,122,69,.25)" : "rgba(169,103,10,.25)";
+    v.corStatusModal = c.status === "conectado" ? "#157A45" : "#A9670A";
+    v.temSqlHelp = !!c.sqlHelp;
+    v.sqlHelp = c.sqlHelp || "";
+    v.ultimaSincronizacao = c.lastSync ? new Date(c.lastSync).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) : "Nenhuma nesta sessão";
 
     /* pessoas */
     v.semPessoas = !st.pessoas.length;
